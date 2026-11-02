@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Mandacaru</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nova+Mono&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="dashboard.css">
+
+</head>
+<body>
+
+  <header class="cabecalho">
+    <div class="container-cabecalho">
+      <div class="logo-area">
+        <img src="img/logo-mandacaru-branco.png" alt="Logo Mandacaru" class="logo-imagem">
+        <h1 class="nome-projeto">Mandacaru</h1>
+      </div>
+      <nav class="menu-navegacao">
+        <ul class="lista-menu">
+          <li><a href="index.html" class="link-menu">Início</a></li>
+          <li><a href="tipos-violencia.html" class="link-menu">Tipos de Violência</a></li>
+          <li><a href="dashboard.html" class="link-menu">Dashboard</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Filtros -->
+    <section class="filtros">
+      <div class="filtro">
+        <label for="filtroRegiao">Região (colunas e linha)</label>
+        <select id="filtroRegiao"></select>
+      </div>
+
+      <div class="filtro filtro-faixas">
+        <label>Faixa etária (pizza)</label>
+        <div id="filtroFaixas" class="checks"></div>
+      </div>
+
+      <div class="filtro">
+        <label for="anoInicio">Ano inicial</label>
+        <select id="anoInicio"></select>
+      </div>
+
+      <div class="filtro">
+        <label for="anoFim">Ano final</label>
+        <select id="anoFim"></select>
+      </div>
+
+      <button id="btnLimpar" type="button">Limpar filtros</button>
+    </section>
+
+    <p id="msgVazio" class="msg-vazio" hidden>Nenhum dado para os filtros escolhidos.</p>
+
+    <!-- Gráficos -->
+    <section class="graficos">
+      <div class="grafico-box"><canvas id="grafico1"></canvas></div>
+      <div class="grafico-box"><canvas id="grafico2"></canvas></div>
+      <div class="grafico-box"><canvas id="grafico3"></canvas></div>
+    </section>
+
+    <!-- API pública (IBGE) -->
+    
+
+    <p class="fonte-dados" id="fonteDados"></p>
+
+  </main>
+
+  <!-- Ordem importante: biblioteca, dados, script,  -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+  <script src="script.js"></script>
+  
+
+
+</body>
+</html>

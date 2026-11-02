@@ -1,0 +1,277 @@
+/* ---------- Variáveis ---------- */
+:root {
+  --cor-escura: #e789fa;
+  --cor-rosa: #D86487;
+  --cor-rosa-clara: #EEAAC3;
+  --cor-roxa: #76172C;
+  --fonte-titulo: 'Nova Mono', monospace;
+  --fonte-texto: 'Nunito', sans-serif;
+}
+
+/* ---------- Geral ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--fonte-texto);
+  line-height: 1.6;
+  color: #333;
+  background-color: #f5f5f5;
+}
+
+/* ---------- Cabeçalho ---------- */
+.cabecalho {
+  background-color: var(--cor-escura);
+  position: sticky;        /* fica no topo sem cobrir os gráficos */
+  top: 0;
+  z-index: 1000;
+}
+
+.container-cabecalho {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-imagem {
+  width: 50px;
+  height: auto;
+}
+
+.nome-projeto {
+  color: #fff;
+  font-size: 24px;
+  font-family: var(--fonte-titulo);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.menu-navegacao {
+  flex: 1;
+  min-width: 300px;
+}
+
+.lista-menu {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.link-menu {
+  color: #fff;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  transition: 0.3s ease;
+  border-bottom: 2px solid transparent;
+  padding-bottom: 5px;
+}
+
+.link-menu:hover {
+  color: var(--cor-rosa);
+  border-bottom: 2px solid var(--cor-rosa);
+}
+
+/* ---------- Página ---------- */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px 20px;
+}
+
+/* ---------- Filtros ---------- */
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+  padding: 16px;
+  margin-bottom: 24px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.filtro {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 140px;
+}
+
+.filtro label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+}
+
+.filtro select {
+  padding: 10px;
+  border: 2px solid var(--cor-rosa-clara);
+  border-radius: 8px;
+  font-family: var(--fonte-texto);
+  font-size: 14px;
+  background: #fff;
+}
+
+.filtro select:focus {
+  outline: none;
+  border-color: var(--cor-rosa);
+}
+
+.filtro-faixas {
+  flex: 2;
+  min-width: 260px;
+}
+
+.checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  padding: 8px 10px;
+  border: 2px solid var(--cor-rosa-clara);
+  border-radius: 8px;
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #333;
+  cursor: pointer;
+}
+
+.check input {
+  accent-color: var(--cor-rosa);
+}
+
+#btnLimpar {
+  padding: 11px 20px;
+  background: var(--cor-rosa);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--fonte-texto);
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#btnLimpar:hover {
+  background: var(--cor-roxa);
+}
+
+.msg-vazio {
+  text-align: center;
+  color: #b00020;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+/* ---------- Gráficos: 2 em cima, 1 embaixo ---------- */
+.graficos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.grafico-box {
+  position: relative;
+  height: 400px;           /* obrigatório para o Chart.js */
+  padding: 16px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* o 3º gráfico (linha) ocupa a linha inteira */
+.grafico-box:nth-child(3) {
+  grid-column: 1 / -1;
+}
+
+/* ---------- API pública (tabela IBGE) ---------- */
+.api-box {
+  margin-top: 24px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.api-box h2 {
+  font-family: var(--fonte-titulo);
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.tabela-scroll {
+  overflow-x: auto;
+}
+
+#tabelaTaxa {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+#tabelaTaxa th,
+#tabelaTaxa td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid var(--cor-rosa-clara);
+}
+
+#tabelaTaxa th {
+  background: var(--cor-escura);
+  color: #fff;
+}
+
+.fonte-dados {
+  margin-top: 16px;
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+}
+
+/* ---------- Celular: um embaixo do outro ---------- */
+@media (max-width: 700px) {
+  .graficos {
+    grid-template-columns: 1fr;
+  }
+
+  .grafico-box {
+    height: 320px;
+  }
+
+  .filtro {
+    min-width: 45%;
+  }
+
+  .filtro-faixas {
+    min-width: 100%;
+  }
+
+  .lista-menu {
+    gap: 12px;
+    justify-content: flex-start;
+  }
+}
