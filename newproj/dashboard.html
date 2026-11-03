@@ -8,9 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nova+Mono&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="dashboard.css">
 
+  <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
 
@@ -32,18 +31,8 @@
 
   <main class="container">
 
-    <!-- Filtros -->
+    <!-- Filtros (todos por ano) -->
     <section class="filtros">
-      <div class="filtro">
-        <label for="filtroRegiao">Região (colunas e linha)</label>
-        <select id="filtroRegiao"></select>
-      </div>
-
-      <div class="filtro filtro-faixas">
-        <label>Faixa etária (pizza)</label>
-        <div id="filtroFaixas" class="checks"></div>
-      </div>
-
       <div class="filtro">
         <label for="anoInicio">Ano inicial</label>
         <select id="anoInicio"></select>
@@ -66,19 +55,13 @@
       <div class="grafico-box"><canvas id="grafico3"></canvas></div>
     </section>
 
-    <!-- API pública (IBGE) -->
-    
-
     <p class="fonte-dados" id="fonteDados"></p>
 
   </main>
 
-  <!-- Ordem importante: biblioteca, dados, script,  -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-
-  <script src="script.js"></script>
   
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="script.js"></script>
 
 </body>
 </html>

@@ -1,75 +1,46 @@
 /* =========================================================
-   Os dados vêm de data/dados.json (carregados com fetch)
+   Os dados vêm de dados.json (carregados com fetch)
    ========================================================= */
-
-/* Medida usada na pizza: 'feminicidios' ou 'mortes' */
-const MEDIDA_PIZZA = 'feminicidios';
 
 const ARQUIVO_DADOS = 'dados.json';
 
 /* Começam vazios e são preenchidos por carregarDados() */
-let dadosMortes = [];
-let dadosFaixaEtaria = [];
+let dadosFeminicidios = [];
+let dadosProcessos = [];
 let dadosDenuncias = [];
 let fonteDados = '';
 
 /* ---------- Elementos da página ---------- */
-const selRegiao = document.getElementById('filtroRegiao');
-const boxFaixas = document.getElementById('filtroFaixas');
 const selAnoIni = document.getElementById('anoInicio');
 const selAnoFim = document.getElementById('anoFim');
 const btnLimpar = document.getElementById('btnLimpar');
 const msgVazio  = document.getElementById('msgVazio');
 
 /* =========================================================
-   FILTROS
+   FILTROS (todos por ano)
    ========================================================= */
 function anosDisponiveis() {
-  const todos = [...dadosMortes, ...dadosFaixaEtaria, ...dadosDenuncias];
+  const todos = [...dadosFeminicidios, ...dadosProcessos, ...dadosDenuncias];
   return [...new Set(todos.map(d => d.ano))].sort((a, b) => a - b);
 }
 
-function regioesDisponiveis() {
-  return [...new Set([...dadosMortes, ...dadosDenuncias].map(d => d.regiao))].sort();
-}
-
-/* Faixas na ordem em que aparecem no JSON */
-function faixasDisponiveis() {
-  return [...new Set(dadosFaixaEtaria.map(d => d.faixa))];
-}
-
-function preencherSelect(select, valores, textoTodos) {
-  select.innerHTML = textoTodos ? `<option value="">${textoTodos}</option>` : '';
-  valores.forEach(v => {
-    select.innerHTML += `<option value="${v}">${v}</option>`;
-  });
-}
-
-function preencherFaixas() {
-  boxFaixas.innerHTML = faixasDisponiveis()
-    .map(f => `<label class="check"><input type="checkbox" value="${f}" checked> ${f}</label>`)
+function preencherSelect(select, valores) {
+  select.innerHTML = valores
+    .map(v => `<option value="${v}">${v}</option>`)
     .join('');
-}
-
-function faixasMarcadas() {
-  return [...boxFaixas.querySelectorAll('input:checked')].map(i => i.value);
 }
 
 function preencherFiltros() {
   const anos = anosDisponiveis();
-  preencherSelect(selRegiao, regioesDisponiveis(), 'Todas as regiões');
   preencherSelect(selAnoIni, anos);
   preencherSelect(selAnoFim, anos);
-  preencherFaixas();
   limparFiltros(false);
 }
 
 function limparFiltros(atualizarTela = true) {
   const anos = anosDisponiveis();
-  selRegiao.value = '';
   selAnoIni.value = anos[0];
   selAnoFim.value = anos[anos.length - 1];
-  boxFaixas.querySelectorAll('input').forEach(i => (i.checked = true));
   if (atualizarTela) atualizar();
 }
 
@@ -77,12 +48,7 @@ function noPeriodo(d) {
   return d.ano >= Number(selAnoIni.value) && d.ano <= Number(selAnoFim.value);
 }
 
-function naRegiao(d) {
-  return !selRegiao.value || d.regiao === selRegiao.value;
-}
-
-/* Soma um campo numérico agrupando por outro campo.
-   A ordem dos grupos é a ordem em que aparecem nos dados. */
+/* Soma um campo numérico agrupando por outro campo. */
 function somarPor(lista, campoGrupo, campoValor) {
   const soma = {};
   lista.forEach(d => {
@@ -91,26 +57,22 @@ function somarPor(lista, campoGrupo, campoValor) {
   return soma;
 }
 
+/* Cor da fatia da pizza: cada ano mantém sempre a mesma cor */
+function corDoAno(indice) {
+  return `hsl(${(indice * 47) % 360}, 70%, 60%)`;
+}
+
 /* =========================================================
    GRÁFICOS (criados uma vez, atualizados depois)
    ========================================================= */
-const cores = [
-  'rgb(255, 99, 132)',
-  'rgb(54, 162, 235)',
-  'rgb(255, 205, 86)',
-  'rgb(75, 192, 192)',
-  'rgb(153, 102, 255)',
-  'rgb(255, 159, 64)',
-  'rgb(201, 203, 207)'
-];
 
-/* Gráfico 1: colunas - mortes por ano */
+/* Gráfico 1: colunas - feminicídios no Brasil por ano */
 const grafico1 = new Chart(document.getElementById('grafico1'), {
   type: 'bar',
   data: {
     labels: [],
     datasets: [{
-      label: 'Mortes',
+      label: 'Feminicídios',
       data: [],
       borderWidth: 2,
       borderColor: 'red',
@@ -121,24 +83,22 @@ const grafico1 = new Chart(document.getElementById('grafico1'), {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      title: { display: true, text: 'Mortes por ano (nº de mortes)' }
+      title: { display: true, text: 'Feminicídios no Brasil por ano (nº de feminicídios)' }
     },
     scales: {
       x: { title: { display: true, text: 'Ano' } },
-      y: { beginAtZero: true, title: { display: true, text: 'Número de mortes' } }
+      y: { beginAtZero: true, title: { display: true, text: 'Número de feminicídios' } }
     }
   }
 });
 
-/* Gráfico 2: pizza - faixa etária */
-const nomeMedida = MEDIDA_PIZZA === 'feminicidios' ? 'feminicídios' : 'mortes';
-
+/* Gráfico 2: pizza - processos de violência doméstica no Judiciário */
 const grafico2 = new Chart(document.getElementById('grafico2'), {
   type: 'pie',
   data: {
     labels: [],
     datasets: [{
-      label: nomeMedida,
+      label: 'Processos',
       data: [],
       backgroundColor: [],
       hoverOffset: 4
@@ -150,14 +110,23 @@ const grafico2 = new Chart(document.getElementById('grafico2'), {
     plugins: {
       title: {
         display: true,
-        text: `Faixa etária das vítimas: ${nomeMedida} (nº de ${nomeMedida})`
+        text: 'Processos de violência doméstica registrados no Judiciário (nº de processos, por ano)'
       },
-      legend: { position: 'bottom' }
+      legend: { position: 'bottom' },
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+            const pct = total ? ((ctx.parsed / total) * 100).toFixed(1).replace('.', ',') : '0';
+            return `${ctx.label}: ${ctx.parsed.toLocaleString('pt-BR')} processos (${pct}%)`;
+          }
+        }
+      }
     }
   }
 });
 
-/* Gráfico 3: linha - denúncias por ano */
+/* Gráfico 3: linha - denúncias no Brasil por ano */
 const grafico3 = new Chart(document.getElementById('grafico3'), {
   type: 'line',
   data: {
@@ -175,7 +144,7 @@ const grafico3 = new Chart(document.getElementById('grafico3'), {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      title: { display: true, text: 'Denúncias por ano (nº de denúncias)' }
+      title: { display: true, text: 'Denúncias no Brasil por ano (nº de denúncias)' }
     },
     scales: {
       x: { title: { display: true, text: 'Ano' } },
@@ -193,29 +162,27 @@ function atualizar() {
     selAnoFim.value = selAnoIni.value;
   }
 
-  const marcadas  = faixasMarcadas();
-  const mortes    = dadosMortes.filter(d => noPeriodo(d) && naRegiao(d));
-  const denuncias = dadosDenuncias.filter(d => noPeriodo(d) && naRegiao(d));
-  const faixas    = dadosFaixaEtaria.filter(d => noPeriodo(d) && marcadas.includes(d.faixa));
+  const feminicidios = dadosFeminicidios.filter(noPeriodo);
+  const processos    = dadosProcessos.filter(noPeriodo);
+  const denuncias    = dadosDenuncias.filter(noPeriodo);
 
   msgVazio.textContent = 'Nenhum dado para os filtros escolhidos.';
-  msgVazio.hidden = (mortes.length + denuncias.length + faixas.length) > 0;
+  msgVazio.hidden = (feminicidios.length + processos.length + denuncias.length) > 0;
 
-  /* Gráfico 1: mortes por ano */
-  const mortesPorAno = somarPor(mortes, 'ano', 'mortes');
-  const anosMortes = Object.keys(mortesPorAno).sort((a, b) => a - b);
-  grafico1.data.labels = anosMortes;
-  grafico1.data.datasets[0].data = anosMortes.map(a => mortesPorAno[a]);
+  /* Gráfico 1: feminicídios por ano */
+  const femPorAno = somarPor(feminicidios, 'ano', 'feminicidios');
+  const anosFem = Object.keys(femPorAno).sort((a, b) => a - b);
+  grafico1.data.labels = anosFem;
+  grafico1.data.datasets[0].data = anosFem.map(a => femPorAno[a]);
 
-  /* Gráfico 2: faixa etária (só as faixas marcadas) */
-  const porFaixa = somarPor(faixas, 'faixa', MEDIDA_PIZZA);
-  const labelsFaixa = Object.keys(porFaixa);
-  const todasFaixas = faixasDisponiveis();
-  grafico2.data.labels = labelsFaixa;
-  grafico2.data.datasets[0].data = Object.values(porFaixa);
-  // cada faixa mantém sempre a mesma cor, mesmo desmarcando outras
+  /* Gráfico 2: processos no Judiciário (cada fatia é um ano) */
+  const procPorAno = somarPor(processos, 'ano', 'processos');
+  const anosProc = Object.keys(procPorAno).sort((a, b) => a - b);
+  const todosAnos = anosDisponiveis();
+  grafico2.data.labels = anosProc;
+  grafico2.data.datasets[0].data = anosProc.map(a => procPorAno[a]);
   grafico2.data.datasets[0].backgroundColor =
-    labelsFaixa.map(f => cores[todasFaixas.indexOf(f) % cores.length]);
+    anosProc.map(a => corDoAno(todosAnos.indexOf(Number(a))));
 
   /* Gráfico 3: denúncias por ano */
   const denPorAno = somarPor(denuncias, 'ano', 'denuncias');
@@ -237,19 +204,20 @@ async function carregarDados() {
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     const json = await resp.json();
 
-    dadosMortes      = json.mortes      || [];
-    dadosFaixaEtaria = json.faixaEtaria || [];
-    dadosDenuncias   = json.denuncias   || [];
-    fonteDados       = json.fonte       || '';
+    dadosFeminicidios = json.feminicidios        || [];
+    dadosProcessos    = json.processosJudiciario || [];
+    dadosDenuncias    = json.denuncias           || [];
+    fonteDados        = json.fonte               || '';
 
     document.getElementById('fonteDados').textContent =
       fonteDados ? 'Fonte dos dados: ' + fonteDados : '';
 
     preencherFiltros();
     atualizar();
-  } catch (error) {
-    console.error('Erro ao carregar dados:', error);
-    msgVazio.textContent = 'Não foi possível carregar os dados.';
+  } catch (erro) {
+    console.error('Erro ao carregar dados:', erro);
+    msgVazio.textContent =
+      'Não foi possível carregar dados.json. Abra a página pelo Live Server e confira o arquivo.';
     msgVazio.hidden = false;
   }
 }
@@ -257,10 +225,9 @@ async function carregarDados() {
 /* =========================================================
    EVENTOS E INÍCIO
    ========================================================= */
-[selRegiao, selAnoIni, selAnoFim].forEach(sel => {
+[selAnoIni, selAnoFim].forEach(sel => {
   sel.addEventListener('change', atualizar);
 });
-boxFaixas.addEventListener('change', atualizar);
 btnLimpar.addEventListener('click', () => limparFiltros());
 
 carregarDados();
