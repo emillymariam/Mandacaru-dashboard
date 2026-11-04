@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Mandacaru</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nova+Mono&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+  <header class="cabecalho">
+    <div class="container-cabecalho">
+      <div class="logo-area">
+        <img src="img/logo-mandacaru-branco.png" alt="Logo Mandacaru" class="logo-imagem">
+        <h1 class="nome-projeto">Mandacaru</h1>
+      </div>
+      <nav class="menu-navegacao">
+        <ul class="lista-menu">
+          <li><a href="index.html" class="link-menu">Início</a></li>
+          <li><a href="tipos-violencia.html" class="link-menu">Tipos de Violência</a></li>
+          <li><a href="dashboard.html" class="link-menu">Dashboard</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Filtros (todos por ano) -->
+    <section class="filtros">
+      <div class="filtro">
+        <label for="anoInicio">Ano inicial</label>
+        <select id="anoInicio"></select>
+      </div>
+
+      <div class="filtro">
+        <label for="anoFim">Ano final</label>
+        <select id="anoFim"></select>
+      </div>
+
+      <button id="btnLimpar" type="button">Limpar filtros</button>
+    </section>
+
+    <p id="msgVazio" class="msg-vazio" hidden>Nenhum dado para os filtros escolhidos.</p>
+
+    <!-- Gráficos -->
+    <section class="graficos">
+      <div class="grafico-box"><canvas id="grafico1"></canvas></div>
+      <div class="grafico-box"><canvas id="grafico2"></canvas></div>
+      <div class="grafico-box"><canvas id="grafico3"></canvas></div>
+    </section>
+
+    <!-- Metas (CRUD com Back4App) -->
+    <section class="metas">
+      <h2>Metas por indicador</h2>
+      <p class="metas-descricao">
+        Cadastre metas anuais e compare com os dados reais. As metas aparecem como
+        uma linha tracejada nos gráficos de feminicídios e de denúncias.
+      </p>
+
+      <form id="formMeta" class="form-meta">
+        <input type="hidden" id="metaId">
+
+        <div class="campo">
+          <label for="metaIndicador">Indicador</label>
+          <select id="metaIndicador">
+            <option value="feminicidios">Feminicídios</option>
+            <option value="denuncias">Denúncias</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="metaAno">Ano</label>
+          <input type="number" id="metaAno" min="2000" max="2100" placeholder="2025" required>
+        </div>
+
+        <div class="campo">
+          <label for="metaValor">Valor da meta</label>
+          <input type="number" id="metaValor" min="0" step="1" placeholder="1200" required>
+        </div>
+
+        <div class="campo campo-grande">
+          <label for="metaObs">Anotação (opcional)</label>
+          <input type="text" id="metaObs" maxlength="200" placeholder="Ex.: meta do plano estadual">
+        </div>
+
+        <div class="botoes-form">
+          <button type="submit" id="btnSalvarMeta">Cadastrar meta</button>
+          <button type="button" id="btnCancelarMeta" class="btn-secundario" hidden>Cancelar</button>
+        </div>
+      </form>
+
+      <p id="msgMetas" class="msg-metas" role="status"></p>
+
+      <div class="tabela-wrap">
+        <table class="tabela-metas">
+          <thead>
+            <tr>
+              <th>Indicador</th>
+              <th>Ano</th>
+              <th>Meta</th>
+              <th>Realizado</th>
+              <th>Diferença</th>
+              <th>Anotação</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="listaMetas"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <p class="fonte-dados" id="fonteDados"></p>
+
+  </main>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="config.js"></script>
+  <script src="api.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>
