@@ -1,3 +1,4 @@
+
 /* Página exclusiva de Locais de Apoio */
 
 .pagina-apoio {
@@ -97,6 +98,8 @@
   color: #514354;
 }
 
+/* LEGENDA DO MAPA */
+
 .legenda-apoio {
   display: flex;
   flex-wrap: wrap;
@@ -121,16 +124,17 @@
   box-shadow: 0 0 0 1px rgba(0,0,0,.25);
 }
 
+/* Delegacias: vermelho */
+
 .marcador-delegacia,
 .pino-delegacia {
   background: #d93655;
 }
 
-.marcador-centro,
-.pino-centro {
-  background: #2878cf;
-}
+/* Centros de Referência / CEAMs: verde */
 
+.marcador-centro,
+.pino-centro,
 .marcador-compaz,
 .pino-compaz {
   background: #239b68;
@@ -140,6 +144,8 @@
 .pino-outro {
   background: #9a55b5;
 }
+
+/* MAPA */
 
 #mapaPernambuco {
   width: 100%;
@@ -241,6 +247,117 @@
   color: #762b8b;
 }
 
+/* RODAPÉ - MESMA IDENTIDADE VISUAL DA PÁGINA INICIAL */
+
+#fontesMapaApoio,
+.rodape-apoio {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #e789fa;
+  color: #fff;
+  padding: 45px 20px 25px;
+  margin-top: 60px;
+  font-family: 'Nunito', sans-serif;
+}
+
+.rodape-apoio .container-rodape {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 2fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.rodape-apoio h3 {
+  color: #fff;
+  font-family: 'Nova Mono', monospace;
+  font-size: 18px;
+  margin: 0 0 18px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #D86487;
+}
+
+.rodape-apoio p {
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 0 0 10px;
+}
+
+.rodape-apoio .info-copyright h3 {
+  font-size: 22px;
+  letter-spacing: 2px;
+}
+
+.rodape-apoio .texto-rodape {
+  margin-top: 15px;
+  opacity: .9;
+}
+
+.rodape-apoio .lista-integrantes {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+}
+
+.rodape-apoio .lista-integrantes li {
+  color: #fff;
+  font-size: 14px;
+}
+
+.rodape-apoio .fontes-rodape ul {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+}
+
+.rodape-apoio .fontes-rodape li {
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.8;
+  margin-bottom: 8px;
+}
+
+.rodape-apoio .fontes-rodape a {
+  color: #fff;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: .3s;
+}
+
+.rodape-apoio .fontes-rodape a:hover {
+  color: #76172C;
+}
+
+.aviso-fontes-rodape {
+  max-width: 1200px;
+  margin: 35px auto 0;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,.4);
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.8;
+  opacity: .95;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 850px) {
+  .rodape-apoio .container-rodape {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
+  .rodape-apoio .fontes-rodape {
+    grid-column: 1 / -1;
+  }
+}
+
 @media (max-width: 600px) {
   .pagina-apoio {
     padding: 22px 13px 35px;
@@ -255,136 +372,27 @@
     width: 100%;
   }
 }
-/* =========================================
-   RODAPÉ DA PÁGINA DE LOCAIS DE APOIO
-========================================= */
-
-.rodape-apoio {
-    width: 100%;
-    background-color: #e789fa;
-    color: #fff;
-    padding: 45px 20px 25px;
-    margin-top: 60px;
-    font-family: 'Nunito', sans-serif;
-}
-
-.rodape-apoio .container-rodape {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr 2fr;
-    gap: 40px;
-    align-items: start;
-}
-
-.rodape-apoio h3 {
-    color: #fff;
-    font-family: 'Nova Mono', monospace;
-    font-size: 18px;
-    margin-bottom: 18px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #D86487;
-}
-
-.rodape-apoio p {
-    color: #fff;
-    font-size: 14px;
-    line-height: 1.7;
-    margin-bottom: 10px;
-}
-
-.rodape-apoio .info-copyright h3 {
-    font-size: 22px;
-    letter-spacing: 2px;
-}
-
-.rodape-apoio .texto-rodape {
-    margin-top: 15px;
-    opacity: 0.9;
-}
-
-.rodape-apoio .lista-integrantes {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 0;
-}
-
-.rodape-apoio .lista-integrantes li {
-    color: #fff;
-    font-size: 14px;
-}
-
-.rodape-apoio .fontes-rodape ul {
-    list-style: none;
-    padding: 0;
-    margin-top: 12px;
-}
-
-.rodape-apoio .fontes-rodape li {
-    color: #fff;
-    font-size: 13px;
-    line-height: 1.8;
-    margin-bottom: 8px;
-}
-
-.rodape-apoio .fontes-rodape a {
-    color: #fff;
-    font-weight: 700;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    transition: 0.3s;
-}
-
-.rodape-apoio .fontes-rodape a:hover {
-    color: #76172C;
-}
-
-.aviso-fontes-rodape {
-    max-width: 1200px;
-    margin: 35px auto 0;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.4);
-    color: #fff;
-    font-size: 12px;
-    line-height: 1.8;
-    opacity: 0.95;
-}
-
-/* RESPONSIVIDADE */
-
-@media (max-width: 850px) {
-    .rodape-apoio .container-rodape {
-        grid-template-columns: 1fr 1fr;
-        gap: 30px;
-    }
-
-    .rodape-apoio .fontes-rodape {
-        grid-column: 1 / -1;
-    }
-}
 
 @media (max-width: 550px) {
-    .rodape-apoio {
-        padding: 35px 20px 20px;
-    }
+  .rodape-apoio {
+    padding: 35px 20px 20px;
+  }
 
-    .rodape-apoio .container-rodape {
-        grid-template-columns: 1fr;
-        gap: 25px;
-    }
+  .rodape-apoio .container-rodape {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
 
-    .rodape-apoio .fontes-rodape {
-        grid-column: auto;
-    }
+  .rodape-apoio .fontes-rodape {
+    grid-column: auto;
+  }
 
-    .rodape-apoio h3 {
-        font-size: 16px;
-    }
+  .rodape-apoio h3 {
+    font-size: 16px;
+  }
 
-    .aviso-fontes-rodape {
-        margin-top: 25px;
-        font-size: 11px;
-    }
+  .aviso-fontes-rodape {
+    margin-top: 25px;
+    font-size: 11px;
+  }
 }
