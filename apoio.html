@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Locais de Apoio - Mandacaru</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Nova+Mono&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="apoio.css">
+</head>
+
+<body>
+
+  <header class="cabecalho">
+    <div class="container-cabecalho">
+
+      <div class="logo-area">
+        <img src="img/logo-mandacaru-branco.png" alt="Logo Mandacaru" class="logo-imagem">
+        <h1 class="nome-projeto">Mandacaru</h1>
+      </div>
+
+      <nav class="menu-navegacao">
+        <ul class="lista-menu">
+          <li><a href="index.html" class="link-menu">Início</a></li>
+          <li><a href="tipos-violencia.html" class="link-menu">Tipos de Violência</a></li>
+          <li><a href="dashboard.html" class="link-menu">Dashboard</a></li>
+          <li><a href="apoio.html" class="link-menu" aria-current="page">Locais de Apoio</a></li>
+        </ul>
+      </nav>
+
+    </div>
+  </header>
+
+  <main class="pagina-apoio">
+
+    <section class="introducao-apoio">
+      <p class="etiqueta-apoio">Rede de proteção • Pernambuco</p>
+
+      <h2>Locais de Apoio</h2>
+
+      <p>
+        Encontre serviços de atendimento, orientação e proteção
+        para mulheres em diferentes municípios de Pernambuco.
+      </p>
+
+      <div class="aviso-dados">
+        <strong>Importante:</strong>
+        os locais exibidos são registros encontrados no OpenStreetMap.
+        A base pode estar incompleta ou desatualizada e não representa
+        todos os serviços existentes no estado. Confirme as informações
+        com a instituição antes de se deslocar.
+      </div>
+    </section>
+
+    <section class="painel-filtros">
+
+      <div class="campo-filtro">
+        <label for="filtroCategoria">Tipo de serviço</label>
+
+        <select id="filtroCategoria">
+          <option value="todos">Todos os tipos</option>
+          <option value="delegacia">Delegacias da Mulher</option>
+          <option value="centro">Centros de Referência / CEAMs</option>
+          <option value="compaz">Compaz / Salas da Mulher</option>
+          <option value="outro">Outros serviços mapeados</option>
+        </select>
+      </div>
+
+      <div class="campo-filtro">
+        <label for="filtroMunicipio">Município</label>
+
+        <select id="filtroMunicipio">
+          <option value="todos">Todos os municípios</option>
+        </select>
+      </div>
+
+      <button id="btnAtualizarLocais" type="button">
+        Atualizar locais
+      </button>
+
+      <button id="btnMinhaLocalizacao" type="button" class="botao-secundario">
+        Usar minha localização
+      </button>
+
+    </section>
+
+    <p id="statusApoio" class="status-apoio" role="status" aria-live="polite">
+      Preparando consulta ao OpenStreetMap...
+    </p>
+
+    <section class="legenda-apoio">
+
+      <span>
+        <i class="marcador-legenda marcador-delegacia"></i>
+        Delegacias da Mulher
+      </span>
+
+      <span>
+        <i class="marcador-legenda marcador-centro"></i>
+        Centros de Referência / CEAMs
+      </span>
+
+      <span>
+        <i class="marcador-legenda marcador-compaz"></i>
+        Compaz / Salas da Mulher
+      </span>
+
+      <span>
+        <i class="marcador-legenda marcador-outro"></i>
+        Outros serviços
+      </span>
+
+    </section>
+
+    <div
+      id="mapaPernambuco"
+      role="application"
+      aria-label="Mapa dos locais de apoio em Pernambuco">
+    </div>
+
+    <section class="resultados-apoio">
+
+      <div class="titulo-resultados">
+        <h3>Serviços encontrados</h3>
+        <span id="quantidadeLocais">0 locais</span>
+      </div>
+
+      <ul id="listaLocais" class="lista-locais"></ul>
+
+    </section>
+
+    <section class="contatos-emergencia">
+
+      <h3>Precisa de ajuda agora?</h3>
+
+      <p>
+        Em situação de emergência policial, ligue
+        <strong>190</strong>.
+      </p>
+
+      <p>
+        Para orientação e denúncia de violência contra a mulher,
+        ligue <strong>180</strong>.
+      </p>
+
+      <p>
+        Endereços de casas-abrigo sigilosas não devem ser divulgados publicamente.
+      </p>
+
+    </section>
+
+    <p class="creditos-mapa">
+      Dados colaborativos:
+      <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">
+        OpenStreetMap
+      </a>
+      • Consulta via Overpass API.
+    </p>
+
+    <p class="fonte-oficial">
+      Consulte também a
+      <a href="https://transparencia.pe.gov.br/gestao-estadual/informacao-protecao-e-atendimento-as-mulheres/protecao-e-atendimento-as-mulheres/"
+         target="_blank" rel="noopener">
+        rede de proteção às mulheres do Governo de Pernambuco
+      </a>.
+    </p>
+
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="apoio.js"></script>
+
+</body>
+</html>
