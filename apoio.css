@@ -1,0 +1,257 @@
+/* Página exclusiva de Locais de Apoio */
+
+.pagina-apoio {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px 20px 48px;
+}
+
+.introducao-apoio {
+  margin-bottom: 22px;
+}
+
+.introducao-apoio h2 {
+  color: #76172C;
+  font-family: var(--fonte-titulo);
+  font-size: clamp(25px, 4vw, 36px);
+  margin: 5px 0 8px;
+}
+
+.introducao-apoio > p {
+  max-width: 900px;
+}
+
+.etiqueta-apoio {
+  color: #9a3caa;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 12px;
+}
+
+.aviso-dados {
+  background: #fff4d9;
+  border-left: 4px solid #d69b24;
+  border-radius: 7px;
+  padding: 12px 15px;
+  margin-top: 14px;
+  font-size: 14px;
+}
+
+.painel-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 14px;
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.09);
+  margin-bottom: 12px;
+}
+
+.campo-filtro {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-width: 190px;
+}
+
+.campo-filtro label {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.campo-filtro select {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #d8a6e2;
+  border-radius: 7px;
+  background: #fff;
+  font: inherit;
+}
+
+.painel-filtros button {
+  border: 0;
+  border-radius: 7px;
+  padding: 12px 17px;
+  background: #8f269f;
+  color: #fff;
+  font: 700 14px var(--fonte-texto);
+  cursor: pointer;
+}
+
+.painel-filtros .botao-secundario {
+  background: #5d5260;
+}
+
+.painel-filtros button:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+.status-apoio {
+  min-height: 26px;
+  margin: 10px 0;
+  color: #514354;
+}
+
+.legenda-apoio {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  margin: 14px 0;
+  font-size: 13px;
+}
+
+.legenda-apoio span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.marcador-legenda,
+.pino-mapa {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.25);
+}
+
+.marcador-delegacia,
+.pino-delegacia {
+  background: #d93655;
+}
+
+.marcador-centro,
+.pino-centro {
+  background: #2878cf;
+}
+
+.marcador-compaz,
+.pino-compaz {
+  background: #239b68;
+}
+
+.marcador-outro,
+.pino-outro {
+  background: #9a55b5;
+}
+
+#mapaPernambuco {
+  width: 100%;
+  height: min(68vh, 650px);
+  min-height: 390px;
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 0 3px 14px rgba(0,0,0,.12);
+}
+
+.pino-mapa {
+  width: 18px;
+  height: 18px;
+  border-width: 3px;
+}
+
+.resultados-apoio {
+  margin-top: 28px;
+}
+
+.titulo-resultados {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.titulo-resultados h3,
+.contatos-emergencia h3 {
+  color: #76172C;
+}
+
+#quantidadeLocais {
+  color: #6c596f;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.lista-locais {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.lista-locais li {
+  background: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  border: 1px solid #ead9ed;
+  box-shadow: 0 2px 6px rgba(0,0,0,.05);
+}
+
+.lista-locais h4 {
+  color: #64236f;
+  margin-bottom: 5px;
+}
+
+.lista-locais p {
+  font-size: 14px;
+  margin: 3px 0;
+  overflow-wrap: anywhere;
+}
+
+.lista-locais a {
+  color: #762b8b;
+  font-weight: 700;
+}
+
+.tag-categoria {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: #f3e6f6;
+  margin: 5px 0;
+}
+
+.contatos-emergencia {
+  margin-top: 28px;
+  padding: 18px;
+  border-radius: 10px;
+  background: #fff;
+  border-left: 5px solid #d93655;
+}
+
+.creditos-mapa,
+.fonte-oficial {
+  font-size: 12px;
+  margin-top: 12px;
+  color: #5e5660;
+}
+
+.creditos-mapa a,
+.fonte-oficial a {
+  color: #762b8b;
+}
+
+@media (max-width: 600px) {
+  .pagina-apoio {
+    padding: 22px 13px 35px;
+  }
+
+  #mapaPernambuco {
+    min-height: 350px;
+    height: 55vh;
+  }
+
+  .painel-filtros button {
+    width: 100%;
+  }
+}
