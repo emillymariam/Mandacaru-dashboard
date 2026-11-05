@@ -5,8 +5,6 @@
 // ============================================
 
 // 1. SERVIÇOS CADASTRADOS
-// Os endereços foram conferidos nas fontes oficiais.
-// Não foram incluídas casas-abrigo com endereço sigiloso.
 
 const todosLocais = [
   // DELEGACIAS DA MULHER
@@ -108,182 +106,238 @@ const todosLocais = [
     categoria: "centro",
     municipio: "Jaboatão dos Guararapes",
     endereco: "Rua Almirante Antônio Farias, 664, Piedade, Jaboatão dos Guararapes - PE",
-    telefone: "(81) 9946-46253"
+    telefone: "(81) 9946-46253",
+    horarioTexto: "08:00 às 17:00",
+    horarios: [["08:00", "17:00"]]
   },
   {
     nome: "Centro de Referência da Mulher Andrelina Lopes",
     categoria: "centro",
     municipio: "Camaragibe",
     endereco: "Rua Sertanópolis, 138, Timbi, Camaragibe - PE",
-    telefone: "(81) 99945-1677"
+    telefone: "(81) 99945-1677",
+    horarioTexto: "08:00 às 16:00",
+    horarios: [["08:00", "16:00"]]
   },
   {
     nome: "Centro de Referência Brites de Albuquerque",
     categoria: "centro",
     municipio: "Igarassu",
     endereco: "Avenida Joaquim Nabuco, 122, Centro, Igarassu - PE",
-    telefone: "(81) 99462-2067"
+    telefone: "(81) 99462-2067",
+    horarioTexto: "08:00 às 16:00",
+    horarios: [["08:00", "16:00"]]
   },
   {
     nome: "Centro de Referência Maria Purcina",
     categoria: "centro",
     municipio: "Cabo de Santo Agostinho",
     endereco: "Rua Dr. Washington Luiz, 27, Centro, Cabo de Santo Agostinho - PE",
-    telefone: "(81) 98543-0782"
+    telefone: "(81) 98543-0782",
+    horarioTexto: "08:00 às 16:00",
+    horarios: [["08:00", "16:00"]]
   },
   {
     nome: "Centro de Referência Eudina Sobral",
     categoria: "centro",
     municipio: "Cabo de Santo Agostinho",
     endereco: "Avenida Prefeito Diomedes, 461, Ponte dos Carvalhos, Cabo de Santo Agostinho - PE",
-    telefone: "(81) 98403-6410"
+    telefone: "(81) 98403-6410,
+    horarioTexto: "08:00 às 16:00",
+    horarios: [["08:00", "16:00"]]
   },
   {
     nome: "Centro de Referência Aqualtune",
     categoria: "centro",
     municipio: "Paulista",
     endereco: "Praça João Pessoa, s/n, Centro, Paulista - PE",
-    telefone: "(81) 99912-0337"
+    telefone: "(81) 99912-0337",
+    horarioTexto: "08:00 às 16:00",
+    horarios: [["08:00", "16:00"]]
   },
   {
     nome: "Centro de Referência Clarice Lispector",
     categoria: "centro",
     municipio: "Recife",
     endereco: "Rua Dr. Silva Ferreira, 122, Santo Amaro, Recife - PE",
-    telefone: "(81) 99488-6138"
+    telefone: "(81) 99488-6138",
+    horarioTexto: "08:00 às 18:00",
+    horarios: [["08:00", "18:00"]]
   },
   {
     nome: "Centro de Referência Eliane Brito de Barros",
     categoria: "centro",
     municipio: "Nazaré da Mata",
     endereco: "Rua Dom Carlos Coelho, 39, Nazaré da Mata - PE",
-    telefone: "(81) 99925-15773"
+    telefone: "(81) 99925-15773",
+    horarioTexto: "08:00 às 12:00 e 13:00 às 17:00",
+    horarios: [["08:00", "12:00"], ["13:00", "17:00"]]
   },
   {
     nome: "CEAM Casa Lisbela - Professora Eunice Xavier",
     categoria: "centro",
     municipio: "Vitória de Santo Antão",
     endereco: "Rua Ismael de Andrade, 152A, Matriz, Vitória de Santo Antão - PE",
-    telefone: "(81) 99596-0575"
+    telefone: "(81) 99596-0575",
+    horarioTexto: "08:00 às 14:00",
+    horarios: [["08:00", "14:00"]]
   },
   {
     nome: "CEAM Maria do Carmo Costa Bezerra",
     categoria: "centro",
     municipio: "Palmares",
     endereco: "Rua Gerôncio Borba, 187, Cohab, Palmares - PE",
-    telefone: "(81) 99605-4957"
+    telefone: "(81) 99605-4957",
+    horarioTexto: "08:00 às 13:00",
+    horarios: [["08:00", "13:00"]]
   },
   {
     nome: "CEAM Izabel Oliveira Cravo",
     categoria: "centro",
     municipio: "Ribeirão",
     endereco: "Rua Maria Beatriz M. Pontes, 1343, SESI, Ribeirão - PE",
-    telefone: "(81) 98304-0603"
+    telefone: "(81) 98304-0603",
+    horarioTexto: "08:00 às 13:00",
+    horarios: [["08:00", "13:00"]]
   },
   {
     nome: "CEAM de Sirinhaém",
     categoria: "centro",
     municipio: "Sirinhaém",
     endereco: "Rua Sebastião Chaves, 63, Centro, Sirinhaém - PE",
-    telefone: "(81) 99247-7641"
+    telefone: "(81) 99247-7641",
+    horarioTexto: "08:00 às 16:00",
+    horarios: [["08:00", "16:00"]]
   },
   {
     nome: "Centro de Referência da Mulher Maria Neuma de Lira",
     categoria: "centro",
     municipio: "Caruaru",
     endereco: "Avenida Portugal, 168, Universitário, Caruaru - PE",
-    telefone: "(81) 98384-4310"
+    telefone: "(81) 98384-4310",
+    horarioTexto: "Atendimento 24 horas",
+    atendimento24h: true
   },
   {
     nome: "Centro de Referência da Mulher Ana Lúcia Beserra Pereira",
     categoria: "centro",
     municipio: "Gravatá",
     endereco: "Rua Estevam Câmara, 241, Centro, Gravatá - PE",
-    telefone: "(81) 3299-1899"
+    telefone: "(81) 3299-1899",
+    horarioTexto: "08:00 às 17:00",
+    horarios: [["08:00", "17:00"]]
   },
   {
     nome: "Centro de Atendimento à Mulher Quitéria Celestino Pontes",
     categoria: "centro",
     municipio: "Agrestina",
     endereco: "Rua Cônego Júlio Cabral, 126, Centro, Agrestina - PE",
-    telefone: "(81) 99822-5090"
+    telefone: "(81) 99822-5090",
+    horarioTexto: "07:00 às 13:00",
+    horarios: [["07:00", "13:00"]]
   },
   {
     nome: "Centro de Atendimento à Mulher Maze Lopes",
     categoria: "centro",
     municipio: "Pesqueira",
     endereco: "Rua Laércio Valença, 26, Centro, Pesqueira - PE",
-    telefone: "(87) 98153-0958"
+    telefone: "(87) 98153-0958",
+    horarioTexto: "Atendimento 24 horas",
+    atendimento24h: true
   },
   {
     nome: "CEAM Nena Marinho",
     categoria: "centro",
     municipio: "Belo Jardim",
     endereco: "Avenida Adjar Maciel, s/n, Centro, Belo Jardim - PE",
-    telefone: "(81) 99433-9337"
+    telefone: "(81) 99433-9337",
+    horarioTexto: "Segunda a sexta, 07:30 às 17:00",
+    horarios: [["07:30", "17:00"]],
+    diasAtendimento: [1, 2, 3, 4, 5]
   },
   {
     nome: "Centro de Referência Joana Beatriz de Lima Silva",
     categoria: "centro",
     municipio: "Garanhuns",
     endereco: "Avenida Simoa Gomes, 16, Heliópolis, Garanhuns - PE",
-    telefone: "(87) 92000-9193"
+    telefone: "(87) 92000-9193",
+    horarioTexto: "Segunda a sexta, 08:00 às 16:00",
+    horarios: [["08:00", "16:00"]],
+    diasAtendimento: [1, 2, 3, 4, 5]
   },
   {
     nome: "Centro de Referência da Mulher de Buíque",
     categoria: "centro",
     municipio: "Buíque",
     endereco: "Praça Nanô Camelo, 89, Centro, Buíque - PE",
-    telefone: "(87) 99212-9538"
+    telefone: "(87) 99212-9538",
+    horarioTexto: "Segunda a sexta, 08:00 às 16:00",
+    horarios: [["08:00", "16:00"]],
+    diasAtendimento: [1, 2, 3, 4, 5]
   },
   {
     nome: "Centro Especializado de Atendimento à Mulher Lucila Medeiros",
     categoria: "centro",
     municipio: "Surubim",
     endereco: "Rua Manoel Aureliano Mateus, 203, Cabaceira, Surubim - PE",
-    telefone: "(81) 99472-5157"
+    telefone: "(81) 99472-5157",
+    horarioTexto: "08:00 às 16:00 (telefone 24h)",
+    horarios: [["08:00", "16:00"]]
   },
   {
     nome: "Casa Josefa Mendes de Barros",
     categoria: "centro",
     municipio: "Santa Cruz do Capibaribe",
     endereco: "Avenida José Moraes da Silva, 230, Centro, Santa Cruz do Capibaribe - PE",
-    telefone: "(81) 97343-9299"
+    telefone: "(81) 97343-9299",
+    horarioTexto: "07:00 às 16:00",
+    horarios: [["07:00", "16:00"]]
   },
   {
     nome: "CEAM Paula Maria do Paraíso",
     categoria: "centro",
     municipio: "Toritama",
     endereco: "Rua João Chagas, 65, Centro, Toritama - PE",
-    telefone: "(81) 99130-9834"
+    telefone: "(81) 99130-9834",
+    horarioTexto: "08:00 às 12:00 e 14:00 às 17:00",
+    horarios: [["08:00", "12:00"], ["14:00", "17:00"]]
   },
   {
     nome: "CEAM Dona Liquinha",
     categoria: "centro",
     municipio: "Vertente do Lério",
     endereco: "Avenida Capitão Luiz de França, 115, Vertente do Lério - PE",
-    telefone: ""
+    telefone: "",
+    horarioTexto: "08:00 às 13:00",
+    horarios: [["08:00", "13:00"]]
   },
   {
     nome: "CEAM Francisquinha Godoy",
     categoria: "centro",
     municipio: "Serra Talhada",
     endereco: "Vila Ferroviária, 1702, São Cristóvão, Serra Talhada - PE",
-    telefone: "(87) 99610-5152"
+    telefone: "(87) 99610-5152",
+    horarioTexto: "Segunda a sexta, 08:00 às 16:00",
+    horarios: [["08:00", "16:00"]],
+    diasAtendimento: [1, 2, 3, 4, 5]
   },
   {
     nome: "Centro Especializado de Atendimento à Mulher Valdete Cézar",
     categoria: "centro",
     municipio: "Petrolina",
     endereco: "Avenida Gilberto Freire, s/n, Vila Mocó, Petrolina - PE",
-    telefone: "(87) 99165-1803"
+    telefone: "(87) 99165-1803",
+    horarioTexto: "08:00 às 17:00",
+    horarios: [["08:00", "17:00"]]
   },
   {
     nome: "Centro Especializado de Atendimento à Mulher de Lagoa Grande",
     categoria: "centro",
     municipio: "Lagoa Grande",
     endereco: "Rua Agamenon Magalhães, Bairro Chafariz, Lagoa Grande - PE",
-    telefone: "(87) 98828-4735"
+    telefone: "(87) 98828-4735",
+    horarioTexto: "08:00 às 16:00",
+    horarios: [["08:00", "16:00"]]
   }
 ];
 
@@ -297,15 +351,18 @@ const quantidadeLocais = document.getElementById("quantidadeLocais");
 const btnAtualizar = document.getElementById("btnAtualizarLocais");
 const btnLocalizacao = document.getElementById("btnMinhaLocalizacao");
 
-// 3. MAPA
+// 3. MAPA E MARCADORES
 
 let mapa = null;
 let marcadorUsuario = null;
 
+const marcadoresLocais = new Map();
+let geocodificacaoIniciada = false;
+
 if (document.getElementById("mapaPernambuco") && typeof L !== "undefined") {
   mapa = L.map("mapaPernambuco").setView([-8.3, -37.8], 7);
 
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution: "&copy; OpenStreetMap"
   }).addTo(mapa);
@@ -323,12 +380,12 @@ function textoSeguro(valor) {
   })[caractere]);
 }
 
-// 5. PREENCHER AUTOMATICAMENTE OS MUNICÍPIOS
+// 5. PREENCHER MUNICÍPIOS AUTOMATICAMENTE
 
 function preencherMunicipios() {
   if (!filtroMunicipio) return;
 
-  const municipioSelecionado = filtroMunicipio.value;
+  const selecionado = filtroMunicipio.value;
 
   const municipios = [...new Set(
     todosLocais.map(local => local.municipio)
@@ -344,35 +401,125 @@ function preencherMunicipios() {
     filtroMunicipio.appendChild(opcao);
   });
 
-  if (municipios.includes(municipioSelecionado)) {
-    filtroMunicipio.value = municipioSelecionado;
+  if (municipios.includes(selecionado)) {
+    filtroMunicipio.value = selecionado;
   }
 }
 
-// 6. FILTRAR E MOSTRAR OS SERVIÇOS
+// 6. SITUAÇÃO DO FUNCIONAMENTO
+
+function situacaoFuncionamento(local) {
+  if (local.atendimento24h) {
+    return {
+      texto: "Aberto 24 horas",
+      classe: "aberto"
+    };
+  }
+
+  if (!local.horarios || !local.horarios.length) {
+    return {
+      texto: "Horário não informado",
+      classe: "nao-informado"
+    };
+  }
+
+  const agora = new Date();
+
+  const partes = new Intl.DateTimeFormat("en-US", {
+    timeZone: "America/Recife",
+    weekday: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23"
+  }).formatToParts(agora);
+
+  const valores = Object.fromEntries(
+    partes.map(parte => [parte.type, parte.value])
+  );
+
+  const dias = {
+    Mon: 1,
+    Tue: 2,
+    Wed: 3,
+    Thu: 4,
+    Fri: 5,
+    Sat: 6,
+    Sun: 0
+  };
+
+  const diaSemana = dias[valores.weekday];
+
+  if (
+    local.diasAtendimento &&
+    !local.diasAtendimento.includes(diaSemana)
+  ) {
+    return {
+      texto: "Fechado hoje",
+      classe: "fechado"
+    };
+  }
+
+  if (
+    !local.diasAtendimento &&
+    (diaSemana === 0 || diaSemana === 6)
+  ) {
+    return {
+      texto: "Dias de atendimento não informados",
+      classe: "nao-informado"
+    };
+  }
+
+  const minutosAgora =
+    Number(valores.hour) * 60 + Number(valores.minute);
+
+  const aberto = local.horarios.some(([inicio, fim]) => {
+    const [horaInicio, minutoInicio] = inicio.split(":").map(Number);
+    const [horaFim, minutoFim] = fim.split(":").map(Number);
+
+    const inicioMinutos = horaInicio * 60 + minutoInicio;
+    const fimMinutos = horaFim * 60 + minutoFim;
+
+    return (
+      minutosAgora >= inicioMinutos &&
+      minutosAgora < fimMinutos
+    );
+  });
+
+  return aberto
+    ? { texto: "Aberto agora", classe: "aberto" }
+    : { texto: "Fechado agora", classe: "fechado" };
+}
+
+// 7. FILTROS
+
+function locaisFiltrados() {
+  const categoria = filtroCategoria
+    ? filtroCategoria.value
+    : "todos";
+
+  const municipio = filtroMunicipio
+    ? filtroMunicipio.value
+    : "todos";
+
+  return todosLocais.filter(local => {
+    const categoriaOk =
+      categoria === "todos" ||
+      local.categoria === categoria;
+
+    const municipioOk =
+      municipio === "todos" ||
+      local.municipio === municipio;
+
+    return categoriaOk && municipioOk;
+  });
+}
+
+// 8. MOSTRAR OS SERVIÇOS NA LISTA
 
 function desenharLocais() {
   if (!listaLocais || !quantidadeLocais) return;
 
-  const categoriaEscolhida = filtroCategoria
-    ? filtroCategoria.value
-    : "todos";
-
-  const municipioEscolhido = filtroMunicipio
-    ? filtroMunicipio.value
-    : "todos";
-
-  const filtrados = todosLocais.filter(local => {
-    const categoriaOk =
-      categoriaEscolhida === "todos" ||
-      local.categoria === categoriaEscolhida;
-
-    const municipioOk =
-      municipioEscolhido === "todos" ||
-      local.municipio === municipioEscolhido;
-
-    return categoriaOk && municipioOk;
-  });
+  const filtrados = locaisFiltrados();
 
   listaLocais.innerHTML = "";
 
@@ -386,16 +533,25 @@ function desenharLocais() {
     const linkMapa =
       `https://www.google.com/maps/search/?api=1&query=${enderecoBusca}`;
 
-    const nomeCategoria =
+    const situacao = situacaoFuncionamento(local);
+
+    const categoria =
       local.categoria === "delegacia"
         ? "Delegacia da Mulher"
         : "Centro de Referência / CEAM";
+
+    const estiloSituacao =
+      situacao.classe === "aberto"
+        ? "color:#176b3a;font-weight:700"
+        : situacao.classe === "fechado"
+          ? "color:#b42332;font-weight:700"
+          : "color:#8a6418;font-weight:700";
 
     item.innerHTML = `
       <h4>${textoSeguro(local.nome)}</h4>
 
       <span class="tag-categoria">
-        ${nomeCategoria}
+        ${categoria}
       </span>
 
       <p>
@@ -411,6 +567,19 @@ function desenharLocais() {
       ${
         local.telefone
           ? `<p><strong>Telefone:</strong> ${textoSeguro(local.telefone)}</p>`
+          : ""
+      }
+
+      <p>
+        <strong>Funcionamento:</strong>
+        <span style="${estiloSituacao}">
+          ${situacao.texto}
+        </span>
+      </p>
+
+      ${
+        local.horarioTexto
+          ? `<p><strong>Horário informado:</strong> ${textoSeguro(local.horarioTexto)}</p>`
           : ""
       }
 
@@ -439,9 +608,189 @@ function desenharLocais() {
     statusApoio.textContent =
       `${filtrados.length} serviços exibidos.`;
   }
+
+  atualizarVisibilidadeMarcadores();
 }
 
-// 7. FILTROS
+// 9. ÍCONES DOS PINOS
+
+function iconeMarcador(categoria) {
+  const cor =
+    categoria === "delegacia"
+      ? "#c83d52"
+      : "#24865b";
+
+  return L.divIcon({
+    className: "marcador-mandacaru",
+    html: `
+      <div style="
+        width:19px;
+        height:19px;
+        border-radius:50% 50% 50% 0;
+        transform:rotate(-45deg);
+        background:${cor};
+        border:3px solid #fff;
+        box-shadow:0 1px 5px #555;
+      "></div>
+    `,
+    iconSize: [25, 25],
+    iconAnchor: [12, 24],
+    popupAnchor: [0, -22]
+  });
+}
+
+// 10. INFORMAÇÕES DOS PINOS
+
+function popupLocal(local) {
+  const situacao = situacaoFuncionamento(local);
+
+  return `
+    <strong>${textoSeguro(local.nome)}</strong>
+    <br>
+    ${textoSeguro(local.municipio)}
+    <br>
+    ${textoSeguro(local.endereco)}
+    <br>
+    <b>Funcionamento:</b> ${situacao.texto}
+    ${
+      local.horarioTexto
+        ? `<br>${textoSeguro(local.horarioTexto)}`
+        : ""
+    }
+    ${
+      local.telefone
+        ? `<br><b>Telefone:</b> ${textoSeguro(local.telefone)}`
+        : ""
+    }
+  `;
+}
+
+// 11. MOSTRAR OU ESCONDER PINOS CONFORME OS FILTROS
+
+function atualizarVisibilidadeMarcadores() {
+  if (!mapa) return;
+
+  const nomesVisiveis = new Set(
+    locaisFiltrados().map(local => local.nome)
+  );
+
+  marcadoresLocais.forEach((marcador, nome) => {
+    if (nomesVisiveis.has(nome)) {
+      marcador.addTo(mapa);
+    } else {
+      mapa.removeLayer(marcador);
+    }
+  });
+}
+
+// 12. LOCALIZAR OS ENDEREÇOS NO OPENSTREETMAP
+
+const PAUSA_GEOCODIFICACAO = ms =>
+  new Promise(resolve => setTimeout(resolve, ms));
+
+async function localizarPino(local) {
+  const chave = `mandacaru_coord_${local.endereco}`;
+
+  try {
+    const salva = localStorage.getItem(chave);
+
+    if (salva) {
+      const ponto = JSON.parse(salva);
+
+      if (
+        ponto &&
+        Number.isFinite(ponto.lat) &&
+        Number.isFinite(ponto.lon)
+      ) {
+        return ponto;
+      }
+    }
+  } catch (erro) {
+    console.warn("Erro ao consultar coordenada salva.", erro);
+  }
+
+  const consulta =
+    `${local.endereco}, Pernambuco, Brasil`;
+
+  const url =
+    `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=br&q=${encodeURIComponent(consulta)}`;
+
+  const resposta = await fetch(url);
+
+  if (!resposta.ok) {
+    throw new Error("Falha ao consultar o mapa.");
+  }
+
+  const dados = await resposta.json();
+
+  if (!dados.length) {
+    return null;
+  }
+
+  const ponto = {
+    lat: Number(dados[0].lat),
+    lon: Number(dados[0].lon)
+  };
+
+  try {
+    localStorage.setItem(chave, JSON.stringify(ponto));
+  } catch (erro) {
+    console.warn("Não foi possível salvar a coordenada.", erro);
+  }
+
+  return ponto;
+}
+
+// 13. CARREGAR OS PINOS NO MAPA
+
+async function carregarPinos() {
+  if (!mapa || geocodificacaoIniciada) return;
+
+  geocodificacaoIniciada = true;
+
+  let encontrados = 0;
+
+  for (const local of todosLocais) {
+    try {
+      const ponto = await localizarPino(local);
+
+      if (ponto) {
+        const marcador = L.marker(
+          [ponto.lat, ponto.lon],
+          {
+            icon: iconeMarcador(local.categoria)
+          }
+        ).bindPopup(popupLocal(local));
+
+        marcadoresLocais.set(local.nome, marcador);
+
+        encontrados++;
+      }
+    } catch (erro) {
+      console.warn(
+        "Não foi possível localizar:",
+        local.nome,
+        erro
+      );
+    }
+
+    atualizarVisibilidadeMarcadores();
+
+    if (statusApoio) {
+      statusApoio.textContent =
+        `Localizando endereços no mapa: ${encontrados} de ${todosLocais.length} encontrados...`;
+    }
+
+    await PAUSA_GEOCODIFICACAO(1100);
+  }
+
+  if (statusApoio) {
+    statusApoio.textContent =
+      `${encontrados} pinos adicionados ao mapa. Os endereços sem correspondência continuam na lista.`;
+  }
+}
+
+// 14. EVENTOS DOS FILTROS
 
 if (filtroCategoria) {
   filtroCategoria.addEventListener("change", desenharLocais);
@@ -451,13 +800,15 @@ if (filtroMunicipio) {
   filtroMunicipio.addEventListener("change", desenharLocais);
 }
 
-// 8. BOTÃO ATUALIZAR
+// 15. BOTÃO ATUALIZAR
 
 if (btnAtualizar) {
-  btnAtualizar.addEventListener("click", desenharLocais);
+  btnAtualizar.addEventListener("click", () => {
+    desenharLocais();
+  });
 }
 
-// 9. USAR MINHA LOCALIZAÇÃO
+// 16. USAR MINHA LOCALIZAÇÃO
 
 if (btnLocalizacao) {
   btnLocalizacao.addEventListener("click", () => {
@@ -466,6 +817,7 @@ if (btnLocalizacao) {
         statusApoio.textContent =
           "Seu navegador não permite obter a localização.";
       }
+
       return;
     }
 
@@ -495,9 +847,10 @@ if (btnLocalizacao) {
               fillColor: "#1a73e8",
               fillOpacity: 1
             }
-          ).addTo(mapa);
-
-          marcadorUsuario.bindPopup("Você está aqui").openPopup();
+          )
+            .addTo(mapa)
+            .bindPopup("Você está aqui")
+            .openPopup();
         }
 
         if (statusApoio) {
@@ -505,12 +858,14 @@ if (btnLocalizacao) {
             "Mapa centralizado na sua localização.";
         }
       },
+
       () => {
         if (statusApoio) {
           statusApoio.textContent =
             "Não foi possível obter sua localização. Verifique a permissão do navegador.";
         }
       },
+
       {
         enableHighAccuracy: true,
         timeout: 10000,
@@ -520,12 +875,16 @@ if (btnLocalizacao) {
   });
 }
 
-// 10. INICIALIZAÇÃO
+// 17. INICIALIZAÇÃO
 
 preencherMunicipios();
+
 desenharLocais();
 
-if (statusApoio) {
-  statusApoio.textContent =
-    `${todosLocais.length} serviços cadastrados em Pernambuco.`;
-}
+carregarPinos();
+
+// 18. ATUALIZAR O STATUS DE FUNCIONAMENTO A CADA MINUTO
+
+setInterval(() => {
+  desenharLocais();
+}, 60000);
