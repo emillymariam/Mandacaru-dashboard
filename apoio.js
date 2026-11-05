@@ -529,3 +529,116 @@ if (statusApoio) {
   statusApoio.textContent =
     `${todosLocais.length} serviços cadastrados em Pernambuco.`;
 }
+
+// 11. RODAPÉ COM FONTES E REFERÊNCIAS
+
+function inserirFontesMapa() {
+  if (document.getElementById("fontesMapaApoio")) return;
+
+  const rodape = document.createElement("footer");
+
+  rodape.id = "fontesMapaApoio";
+  rodape.className = "rodape rodape-apoio";
+
+  rodape.innerHTML = `
+    <div class="container-rodape">
+
+      <div class="info-copyright">
+        <h3>Mandacaru</h3>
+
+        <p>
+          &copy; 2026 Mandacaru.
+          Todos os direitos reservados.
+        </p>
+
+        <p class="texto-rodape">
+          Apoio e proteção ao alcance de um toque.
+        </p>
+      </div>
+
+      <div class="integrantes">
+        <h3>Integrantes do Projeto</h3>
+
+        <ul class="lista-integrantes">
+          <li>Emilly Maria</li>
+          <li>Marcelo José</li>
+          <li>Sidney Barroso</li>
+        </ul>
+      </div>
+
+      <div class="fontes-rodape">
+        <h3>Fontes e referências</h3>
+
+        <p>
+          Os dados dos pontos de atendimento foram reunidos
+          a partir de fontes públicas e oficiais.
+        </p>
+
+        <ul>
+          <li>
+            <a href="https://www.openstreetmap.org/"
+               target="_blank"
+               rel="noopener noreferrer">
+              OpenStreetMap
+            </a>
+            — dados cartográficos.
+          </li>
+
+          <li>
+            <a href="https://nominatim.org/"
+               target="_blank"
+               rel="noopener noreferrer">
+              Nominatim
+            </a>
+            — localização dos endereços.
+          </li>
+
+          <li>
+            <a href="https://transparencia.pe.gov.br/gestao-estadual/informacao-protecao-e-atendimento-as-mulheres/protecao-e-atendimento-as-mulheres/"
+               target="_blank"
+               rel="noopener noreferrer">
+              Portal da Transparência de Pernambuco
+            </a>
+            — centros e serviços de atendimento.
+          </li>
+
+          <li>
+            <a href="https://endereco.policiacivil.pe.gov.br/CDT/openform.do?action=openform&formID=21&sys=CDT"
+               target="_blank"
+               rel="noopener noreferrer">
+              Polícia Civil de Pernambuco
+            </a>
+            — endereços e telefones das delegacias.
+          </li>
+
+          <li>
+            <a href="https://www.openstreetmap.org/copyright"
+               target="_blank"
+               rel="noopener noreferrer">
+              Créditos do OpenStreetMap
+            </a>
+            — direitos autorais e atribuição.
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="aviso-fontes-rodape">
+      <strong>Importante:</strong>
+      alguns pinos podem indicar apenas uma localização aproximada
+      dentro do município, quando o endereço completo não é encontrado.
+      Nesses casos, o pino não representa necessariamente o endereço
+      exato do atendimento.
+
+      O status de funcionamento é calculado com base nos horários
+      cadastrados. Quando a fonte não informa os dias da semana,
+      segunda a sexta são usados como referência; o funcionamento
+      aos fins de semana aparece como não informado.
+      Serviços sem horário cadastrado não recebem status de aberto
+      ou fechado.
+    </div>
+  `;
+
+  document.body.appendChild(rodape);
+}
