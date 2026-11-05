@@ -1,6 +1,15 @@
 {
   "fonte": "Informe aqui as fontes (feminicídios, processos do Judiciário e denúncias, com links)",
 
+  "mortes": [
+    { "ano": 2021, "regiao": "Norte",    "mortes": 40 },
+    { "ano": 2021, "regiao": "Nordeste", "mortes": 90 },
+    { "ano": 2022, "regiao": "Norte",    "mortes": 55 },
+    { "ano": 2022, "regiao": "Nordeste", "mortes": 100 },
+    { "ano": 2023, "regiao": "Norte",    "mortes": 60 },
+    { "ano": 2023, "regiao": "Nordeste", "mortes": 120 }
+  ],
+
   "feminicidios": [
     { "ano": 2020, "feminicidios": 1000 },
     { "ano": 2021, "feminicidios": 1100 },
@@ -9,12 +18,34 @@
     { "ano": 2024, "feminicidios": 1400 }
   ],
 
+  "faixaEtaria": [
+    { "ano": 2021, "faixa": "0 a 17 anos",     "feminicidios": 5 },
+    { "ano": 2021, "faixa": "18 a 29 anos",    "feminicidios": 30 },
+    { "ano": 2021, "faixa": "30 a 39 anos",    "feminicidios": 40 },
+    { "ano": 2021, "faixa": "40 a 59 anos",    "feminicidios": 25 },
+    { "ano": 2021, "faixa": "60 anos ou mais", "feminicidios": 10 },
+    { "ano": 2022, "faixa": "0 a 17 anos",     "feminicidios": 6 },
+    { "ano": 2022, "faixa": "18 a 29 anos",    "feminicidios": 32 },
+    { "ano": 2022, "faixa": "30 a 39 anos",    "feminicidios": 42 },
+    { "ano": 2022, "faixa": "40 a 59 anos",    "feminicidios": 28 },
+    { "ano": 2022, "faixa": "60 anos ou mais", "feminicidios": 12 }
+  ],
+
   "processosJudiciario": [
     { "ano": 2020, "processos": 200000 },
     { "ano": 2021, "processos": 250000 },
     { "ano": 2022, "processos": 300000 },
     { "ano": 2023, "processos": 350000 },
     { "ano": 2024, "processos": 400000 }
+  ],
+
+  "denunciasPorRegiao": [
+    { "ano": 2021, "regiao": "Norte",    "denuncias": 300 },
+    { "ano": 2021, "regiao": "Nordeste", "denuncias": 800 },
+    { "ano": 2022, "regiao": "Norte",    "denuncias": 350 },
+    { "ano": 2022, "regiao": "Nordeste", "denuncias": 900 },
+    { "ano": 2023, "regiao": "Norte",    "denuncias": 420 },
+    { "ano": 2023, "regiao": "Nordeste", "denuncias": 1000 }
   ],
 
   "denuncias": [
