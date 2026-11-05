@@ -708,4 +708,3 @@ btnLocalizacao.addEventListener('click', usarMinhaLocalizacao);
 
 preencherMunicipios();
 desenharLocais();
-
