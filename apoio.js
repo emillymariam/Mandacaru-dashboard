@@ -142,7 +142,7 @@ const todosLocais = [
     categoria: "centro",
     municipio: "Cabo de Santo Agostinho",
     endereco: "Avenida Prefeito Diomedes, 461, Ponte dos Carvalhos, Cabo de Santo Agostinho - PE",
-    telefone: "(81) 98403-6410,
+    telefone: "(81) 98403-6410",
     horarioTexto: "08:00 às 16:00",
     horarios: [["08:00", "16:00"]]
   },
@@ -449,22 +449,20 @@ function situacaoFuncionamento(local) {
 
   const diaSemana = dias[valores.weekday];
 
-  if (
-    local.diasAtendimento &&
-    !local.diasAtendimento.includes(diaSemana)
-  ) {
-    return {
-      texto: "Fechado hoje",
-      classe: "fechado"
-    };
-  }
+  // Quando a fonte informa apenas o horário, usamos dias úteis
+  // como referência. Fins de semana ficam como "não informado".
+  const diasConsiderados = local.diasAtendimento || [1, 2, 3, 4, 5];
 
-  if (
-    !local.diasAtendimento &&
-    (diaSemana === 0 || diaSemana === 6)
-  ) {
+  if (!diasConsiderados.includes(diaSemana)) {
+    if (local.diasAtendimento) {
+      return {
+        texto: "Fechado hoje",
+        classe: "fechado"
+      };
+    }
+
     return {
-      texto: "Dias de atendimento não informados",
+      texto: "Funcionamento hoje não informado",
       classe: "nao-informado"
     };
   }
@@ -578,6 +576,12 @@ function desenharLocais() {
       </p>
 
       ${
+        local.localizacaoAproximada
+          ? `<p style="color:#8a6418;font-size:0.9em;"><strong>Localização aproximada:</strong> pino posicionado na região central do município, não no endereço exato.</p>`
+          : ""
+      }
+
+      ${
         local.horarioTexto
           ? `<p><strong>Horário informado:</strong> ${textoSeguro(local.horarioTexto)}</p>`
           : ""
@@ -654,7 +658,12 @@ function popupLocal(local) {
     <b>Funcionamento:</b> ${situacao.texto}
     ${
       local.horarioTexto
-        ? `<br>${textoSeguro(local.horarioTexto)}`
+        ? `<br><b>Horário informado:</b> ${textoSeguro(local.horarioTexto)}`
+        : ""
+    }
+    ${
+      local.localizacaoAproximada
+        ? `<br><span style="color:#8a6418;"><b>Localização aproximada:</b> pino no município, não no endereço exato.</span>`
         : ""
     }
     ${
@@ -675,6 +684,12 @@ function atualizarVisibilidadeMarcadores() {
   );
 
   marcadoresLocais.forEach((marcador, nome) => {
+    const local = todosLocais.find(item => item.nome === nome);
+
+    if (local) {
+      marcador.setPopupContent(popupLocal(local));
+    }
+
     if (nomesVisiveis.has(nome)) {
       marcador.addTo(mapa);
     } else {
@@ -683,16 +698,43 @@ function atualizarVisibilidadeMarcadores() {
   });
 }
 
-// 12. LOCALIZAR OS ENDEREÇOS NO OPENSTREETMAP
+// 12. LOCALIZAR ENDEREÇOS E, SE NECESSÁRIO, USAR PONTO APROXIMADO
+// Primeiro tenta localizar o endereço. Se não conseguir, procura o município.
+// O ponto aproximado é identificado no popup e na lista.
 
 const PAUSA_GEOCODIFICACAO = ms =>
   new Promise(resolve => setTimeout(resolve, ms));
 
-async function localizarPino(local) {
-  const chave = `mandacaru_coord_${local.endereco}`;
+const cacheMunicipios = new Map();
 
+async function consultarNominatim(consulta) {
+  const url =
+    `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=br&q=${encodeURIComponent(consulta)}`;
+
+  const resposta = await fetch(url);
+
+  if (!resposta.ok) {
+    throw new Error("Falha ao consultar o serviço de localização.");
+  }
+
+  const dados = await resposta.json();
+
+  if (!dados.length) {
+    return null;
+  }
+
+  return {
+    lat: Number(dados[0].lat),
+    lon: Number(dados[0].lon)
+  };
+}
+
+async function localizarPino(local) {
+  const chaveEndereco = `mandacaru_coord_endereco_${local.endereco}`;
+
+  // 1. Verifica se o endereço já foi localizado anteriormente.
   try {
-    const salva = localStorage.getItem(chave);
+    const salva = localStorage.getItem(chaveEndereco);
 
     if (salva) {
       const ponto = JSON.parse(salva);
@@ -702,6 +744,7 @@ async function localizarPino(local) {
         Number.isFinite(ponto.lat) &&
         Number.isFinite(ponto.lon)
       ) {
+        local.localizacaoAproximada = false;
         return ponto;
       }
     }
@@ -709,36 +752,58 @@ async function localizarPino(local) {
     console.warn("Erro ao consultar coordenada salva.", erro);
   }
 
-  const consulta =
-    `${local.endereco}, Pernambuco, Brasil`;
+  // 2. Tenta localizar o endereço completo.
+  try {
+    const consultaEndereco =
+      `${local.endereco}, Pernambuco, Brasil`;
 
-  const url =
-    `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=br&q=${encodeURIComponent(consulta)}`;
+    const pontoEndereco = await consultarNominatim(consultaEndereco);
 
-  const resposta = await fetch(url);
+    if (pontoEndereco) {
+      local.localizacaoAproximada = false;
 
-  if (!resposta.ok) {
-    throw new Error("Falha ao consultar o mapa.");
+      try {
+        localStorage.setItem(
+          chaveEndereco,
+          JSON.stringify(pontoEndereco)
+        );
+      } catch (erro) {
+        console.warn("Não foi possível salvar a coordenada.", erro);
+      }
+
+      return pontoEndereco;
+    }
+  } catch (erro) {
+    console.warn("Não foi possível localizar o endereço exato:", local.nome, erro);
   }
 
-  const dados = await resposta.json();
+  // 3. Se o endereço não aparecer, aguarda antes da próxima consulta
+  // e tenta localizar o município. O resultado é apenas aproximado.
+  await PAUSA_GEOCODIFICACAO(1100);
 
-  if (!dados.length) {
-    return null;
+  const chaveMunicipio = local.municipio.toLocaleLowerCase("pt-BR");
+
+  if (cacheMunicipios.has(chaveMunicipio)) {
+    local.localizacaoAproximada = true;
+    return cacheMunicipios.get(chaveMunicipio);
   }
-
-  const ponto = {
-    lat: Number(dados[0].lat),
-    lon: Number(dados[0].lon)
-  };
 
   try {
-    localStorage.setItem(chave, JSON.stringify(ponto));
+    const pontoMunicipio = await consultarNominatim(
+      `${local.municipio}, Pernambuco, Brasil`
+    );
+
+    if (pontoMunicipio) {
+      cacheMunicipios.set(chaveMunicipio, pontoMunicipio);
+      local.localizacaoAproximada = true;
+
+      return pontoMunicipio;
+    }
   } catch (erro) {
-    console.warn("Não foi possível salvar a coordenada.", erro);
+    console.warn("Não foi possível localizar o município:", local.municipio, erro);
   }
 
-  return ponto;
+  return null;
 }
 
 // 13. CARREGAR OS PINOS NO MAPA
@@ -749,14 +814,32 @@ async function carregarPinos() {
   geocodificacaoIniciada = true;
 
   let encontrados = 0;
+  const quantidadePorMunicipio = new Map();
 
   for (const local of todosLocais) {
     try {
       const ponto = await localizarPino(local);
 
       if (ponto) {
+        let latitudePino = ponto.lat;
+        let longitudePino = ponto.lon;
+
+        // Pequeno deslocamento visual para que serviços do mesmo município
+        // não fiquem exatamente um sobre o outro quando o ponto é aproximado.
+        if (local.localizacaoAproximada) {
+          const chaveMunicipio = local.municipio.toLocaleLowerCase("pt-BR");
+          const indice = quantidadePorMunicipio.get(chaveMunicipio) || 0;
+          quantidadePorMunicipio.set(chaveMunicipio, indice + 1);
+
+          const angulo = indice * 2.399963;
+          const distancia = 0.0015 + (indice % 4) * 0.0005;
+
+          latitudePino += Math.cos(angulo) * distancia;
+          longitudePino += Math.sin(angulo) * distancia;
+        }
+
         const marcador = L.marker(
-          [ponto.lat, ponto.lon],
+          [latitudePino, longitudePino],
           {
             icon: iconeMarcador(local.categoria)
           }
@@ -784,9 +867,11 @@ async function carregarPinos() {
     await PAUSA_GEOCODIFICACAO(1100);
   }
 
+  desenharLocais();
+
   if (statusApoio) {
     statusApoio.textContent =
-      `${encontrados} pinos adicionados ao mapa. Os endereços sem correspondência continuam na lista.`;
+      `${encontrados} pinos adicionados ao mapa. Quando o endereço não foi localizado, o pino representa uma localização aproximada no município.`;
   }
 }
 
@@ -875,15 +960,92 @@ if (btnLocalizacao) {
   });
 }
 
-// 17. INICIALIZAÇÃO
+// 17. FONTES E REFERÊNCIAS NO FINAL DA PÁGINA
+
+function inserirFontesMapa() {
+  if (document.getElementById("fontesMapaApoio")) return;
+
+  const secao = document.createElement("section");
+  secao.id = "fontesMapaApoio";
+  secao.style.cssText = `
+    margin: 36px auto 24px;
+    padding: 20px;
+    max-width: 1100px;
+    border-top: 1px solid #d9d9d9;
+    color: #444;
+    font-size: 14px;
+    line-height: 1.6;
+  `;
+
+  secao.innerHTML = `
+    <h3 style="margin:0 0 10px;color:#285b45;">Fontes e referências</h3>
+    <p>
+      O mapa e as localizações exibidas nesta página utilizam serviços
+      do OpenStreetMap. Os dados dos pontos de atendimento foram reunidos
+      a partir de fontes públicas e oficiais.
+    </p>
+    <ul style="padding-left:20px;">
+      <li>
+        <strong>Mapa:</strong>
+        <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener noreferrer">
+          OpenStreetMap
+        </a>
+        — dados cartográficos.
+      </li>
+      <li>
+        <strong>Localização dos endereços:</strong>
+        <a href="https://nominatim.org/" target="_blank" rel="noopener noreferrer">
+          Nominatim
+        </a>
+        — serviço de busca de coordenadas do OpenStreetMap.
+      </li>
+      <li>
+        <strong>Centros de Referência e serviços de atendimento:</strong>
+        <a href="https://transparencia.pe.gov.br/gestao-estadual/informacao-protecao-e-atendimento-as-mulheres/protecao-e-atendimento-as-mulheres/" target="_blank" rel="noopener noreferrer">
+          Portal da Transparência de Pernambuco
+        </a>.
+      </li>
+      <li>
+        <strong>Delegacias da Mulher:</strong>
+        <a href="https://endereco.policiacivil.pe.gov.br/CDT/openform.do?action=openform&formID=21&sys=CDT" target="_blank" rel="noopener noreferrer">
+          Consulta de endereços e telefones da Polícia Civil de Pernambuco
+        </a>.
+      </li>
+      <li>
+        <strong>Créditos do mapa:</strong>
+        <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">
+          OpenStreetMap — direitos autorais e atribuição
+        </a>.
+      </li>
+    </ul>
+    <p style="font-size:13px;color:#666;">
+      <strong>Importante:</strong> alguns pinos podem indicar apenas uma
+      localização aproximada dentro do município, quando o endereço completo
+      não é encontrado pelo serviço de localização. Nesses casos, o pino não
+      representa necessariamente o endereço exato do atendimento.
+      O status de funcionamento é calculado com base nos horários cadastrados.
+      Quando a fonte não informa os dias da semana, segunda a sexta são usados
+      como referência; o funcionamento aos fins de semana aparece como não
+      informado. Serviços sem horário cadastrado não recebem status de aberto
+      ou fechado.
+    </p>
+  `;
+
+  const destino = document.querySelector("main") || document.body;
+  destino.appendChild(secao);
+}
+
+// 18. INICIALIZAÇÃO
 
 preencherMunicipios();
 
 desenharLocais();
 
+inserirFontesMapa();
+
 carregarPinos();
 
-// 18. ATUALIZAR O STATUS DE FUNCIONAMENTO A CADA MINUTO
+// 19. ATUALIZAR O STATUS DE FUNCIONAMENTO A CADA MINUTO
 
 setInterval(() => {
   desenharLocais();
