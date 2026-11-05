@@ -1,3 +1,4 @@
+
 :root {
     /* Paleta de cores simplificada */
     --cor-escura: #e789fa;
@@ -878,3 +879,5 @@ body {
 .link-menu:hover {
   text-decoration: underline;
 }
+
+/* ---------- Gráficos: 2 em cima, 1 embaixo ---------- */
