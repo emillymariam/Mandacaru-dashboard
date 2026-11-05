@@ -1,145 +1,499 @@
-const todosDias = (a, b) => Array(7).fill([a, b]);
+// ========================================
+// MANDACARU - LOCAIS DE APOIO
+// OpenStreetMap + Overpass API
+// ========================================
 
-/* lat/lng aproximados: confira no Passo 7 */
-const LOCAIS_APOIO = [
-  {
-    nome: 'Centro de Referência Clarice Lispector',
-    endereco: 'Rua Doutor Silva Ferreira, 122, Santo Amaro, Recife',
-    horarioTexto: '24 horas', h24: true,
-    tel: '(81) 3355-9495',
-    lat: -8.0525, lng: -34.8825
-  },
-  {
-    nome: 'SER Clarice Lispector Zona Sul',
-    endereco: 'Avenida Recife, 700, Areias, Recife',
-    horarioTexto: 'Todos os dias, 7h às 19h',
-    faixas: todosDias(7, 19),
-    tel: '(81) 3355-9823',
-    lat: -8.0870, lng: -34.9130
-  },
-  {
-    nome: 'Centro Marta Almeida (Direitos da Mulher)',
-    endereco: 'Rua do Bom Jesus, 147, Bairro do Recife, Recife',
-    horarioTexto: 'Ter a sáb 8h–17h; dom 10h–18h',
-    faixas: [[10, 18], null, [8, 17], [8, 17], [8, 17], [8, 17], [8, 17]], // dom..sáb
-    tel: '(81) 99488-4803',
-    lat: -8.0630, lng: -34.8718
-  },
-  {
-    nome: '1ª Delegacia da Mulher do Recife',
-    endereco: 'Rua do Pombal, s/n, Praça do Campo, Santo Amaro, Recife',
-    horarioTexto: 'Plantão 24 horas', h24: true,
-    tel: '(81) 3184-3356',
-    lat: -8.0545, lng: -34.8805
-  }
-];
+// Inicialização do mapa de Pernambuco
+const mapa = L.map('mapaPernambuco').setView([-8.3, -37.8], 7);
 
-const btnApoio   = document.getElementById('btnApoio');
-const msgApoio   = document.getElementById('msgApoio');
-const divMapa    = document.getElementById('mapaApoio');
-const listaApoio = document.getElementById('listaApoio');
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '&copy; OpenStreetMap'
+}).addTo(mapa);
 
-let mapaApoio = null;
-let camadaApoio = null;
+// Camada dos marcadores
+const camadaLocais = L.layerGroup().addTo(mapa);
 
-function iniciarMapaApoio() {
-  divMapa.hidden = false;
-  if (!mapaApoio) {
-    mapaApoio = L.map('mapaApoio').setView([-8.063, -34.882], 12);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(mapaApoio);
-    camadaApoio = L.layerGroup().addTo(mapaApoio);
-  }
-  mapaApoio.invalidateSize();
-  camadaApoio.clearLayers();
+// Elementos da página
+const filtroCategoria = document.getElementById('filtroCategoria');
+const filtroMunicipio = document.getElementById('filtroMunicipio');
+const statusApoio = document.getElementById('statusApoio');
+const listaLocais = document.getElementById('listaLocais');
+const quantidadeLocais = document.getElementById('quantidadeLocais');
+const btnAtualizar = document.getElementById('btnAtualizarLocais');
+const btnLocalizacao = document.getElementById('btnMinhaLocalizacao');
+
+// Lista de locais encontrados
+let todosLocais = [];
+
+// Consulta à API Overpass
+const consultaOverpass = `
+[out:json][timeout:60];
+
+area["name"="Pernambuco"]
+["boundary"="administrative"]
+["admin_level"="4"]->.estado;
+
+(
+  nwr(area.estado)["amenity"="police"]["name"~"mulher|delegacia",i];
+
+  nwr(area.estado)["police"="women"];
+
+  nwr(area.estado)["social_facility"~"women|shelter|outreach",i];
+
+  nwr(area.estado)["name"~"compaz|centro de referência|centro de atendimento à mulher|sala da mulher|secretaria da mulher|delegacia da mulher",i];
+);
+
+out center tags;
+`;
+
+// Proteção contra conteúdo HTML inesperado
+function textoSeguro(valor) {
+  return String(valor || '').replace(/[&<>"']/g, caractere => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  })[caractere]);
 }
 
-/* Distância em km entre dois pontos (fórmula de Haversine) */
-function distanciaKm(lat1, lng1, lat2, lng2) {
-  const R = 6371, rad = x => x * Math.PI / 180;
-  const dLat = rad(lat2 - lat1), dLng = rad(lng2 - lng1);
-  const a = Math.sin(dLat / 2) ** 2 +
-            Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLng / 2) ** 2;
-  return 2 * R * Math.asin(Math.sqrt(a));
-}
+// Obtém latitude e longitude
+function obterCoordenadas(elemento) {
 
-function estaAberto(l) {
-  if (l.h24) return true;
-  const agora = new Date();
-  const faixa = l.faixas[agora.getDay()];
-  const h = agora.getHours() + agora.getMinutes() / 60;
-  return !!faixa && h >= faixa[0] && h < faixa[1];
-}
-
-function linkRota(l) {
-  return 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(l.endereco);
-}
-
-function mostrarLocais(usuario) {
-  iniciarMapaApoio();
-
-  const locais = LOCAIS_APOIO.map(l => ({
-    ...l,
-    km: usuario ? distanciaKm(usuario.lat, usuario.lng, l.lat, l.lng) : null
-  }));
-  if (usuario) locais.sort((a, b) => a.km - b.km);
-
-  const pontos = [];
-
-  if (usuario) {
-    L.circleMarker([usuario.lat, usuario.lng], {
-      radius: 9, color: 'white', weight: 3, fillColor: '#1a73e8', fillOpacity: 1
-    }).addTo(camadaApoio).bindPopup('Você está aqui');
-    pontos.push([usuario.lat, usuario.lng]);
+  if (elemento.lat != null && elemento.lon != null) {
+    return {
+      lat: elemento.lat,
+      lng: elemento.lon
+    };
   }
 
-  listaApoio.innerHTML = '';
-  locais.forEach(l => {
-    const aberto = estaAberto(l);
-    const dist = l.km !== null ? `${l.km.toFixed(1).replace('.', ',')} km · ` : '';
+  if (elemento.center) {
+    return {
+      lat: elemento.center.lat,
+      lng: elemento.center.lon
+    };
+  }
 
-    L.marker([l.lat, l.lng]).addTo(camadaApoio).bindPopup(
-      `<strong>${l.nome}</strong><br>${l.endereco}<br>${l.horarioTexto}<br>` +
-      `<a href="${linkRota(l)}" target="_blank" rel="noopener">Como chegar</a>`
-    );
-    pontos.push([l.lat, l.lng]);
+  return null;
+}
 
-    const li = document.createElement('li');
-    li.innerHTML =
-      `<strong>${l.nome}</strong><br>` +
-      `${dist}<span class="${aberto ? 'aberto' : 'fechado'}">${aberto ? 'Aberto agora' : 'Fechado agora'}</span> · ${l.horarioTexto}<br>` +
-      `${l.endereco}<br>` +
-      `Tel: ${l.tel} · <a href="${linkRota(l)}" target="_blank" rel="noopener">Como chegar</a>`;
-    listaApoio.appendChild(li);
+// Identifica a categoria do serviço
+function classificarLocal(tags) {
+
+  const nome = (tags.name || '').toLowerCase();
+
+  if (
+    tags.police === 'women' ||
+    /delegacia.*mulher|mulher.*delegacia/.test(nome)
+  ) {
+    return {
+      chave: 'delegacia',
+      nome: 'Delegacia da Mulher',
+      cor: 'delegacia'
+    };
+  }
+
+  if (/compaz|sala da mulher/.test(nome)) {
+    return {
+      chave: 'compaz',
+      nome: 'Compaz / Sala da Mulher',
+      cor: 'compaz'
+    };
+  }
+
+  if (
+    tags.social_facility ||
+    /centro de referência|centro de atendimento|ceam|clarice lispector/.test(nome)
+  ) {
+    return {
+      chave: 'centro',
+      nome: 'Centro de Referência / serviço especializado',
+      cor: 'centro'
+    };
+  }
+
+  return {
+    chave: 'outro',
+    nome: 'Outro serviço mapeado',
+    cor: 'outro'
+  };
+}
+
+// Organiza os dados recebidos da API
+function montarLocal(elemento) {
+
+  const tags = elemento.tags || {};
+  const coordenadas = obterCoordenadas(elemento);
+
+  if (!coordenadas) {
+    return null;
+  }
+
+  const categoria = classificarLocal(tags);
+
+  const endereco = [
+    tags['addr:street'],
+    tags['addr:housenumber'],
+    tags['addr:suburb'],
+    tags['addr:city']
+  ].filter(Boolean).join(', ');
+
+  return {
+    id: `${elemento.type}-${elemento.id}`,
+    nome: tags.name || categoria.nome,
+    categoria: categoria,
+
+    municipio:
+      tags['addr:city'] ||
+      tags['addr:municipality'] ||
+      tags['is_in:city'] ||
+      'Município não informado',
+
+    endereco:
+      endereco ||
+      'Endereço não informado no OpenStreetMap',
+
+    telefone:
+      tags.phone ||
+      tags['contact:phone'] ||
+      '',
+
+    site:
+      tags.website ||
+      tags['contact:website'] ||
+      '',
+
+    lat: coordenadas.lat,
+    lng: coordenadas.lng,
+
+    osm: `https://www.openstreetmap.org/${elemento.type}/${elemento.id}`
+  };
+}
+
+// Cria marcadores coloridos
+function criarIcone(cor) {
+
+  return L.divIcon({
+    className: '',
+    html: `<span class="pino-mapa pino-${cor}"></span>`,
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+    popupAnchor: [0, -10]
+  });
+}
+
+// Mostra os locais no mapa e na lista
+function desenharLocais() {
+
+  camadaLocais.clearLayers();
+  listaLocais.innerHTML = '';
+
+  const categoriaEscolhida = filtroCategoria.value;
+  const municipioEscolhido = filtroMunicipio.value;
+
+  const filtrados = todosLocais.filter(local => {
+
+    const categoriaOk =
+      categoriaEscolhida === 'todos' ||
+      local.categoria.chave === categoriaEscolhida;
+
+    const municipioOk =
+      municipioEscolhido === 'todos' ||
+      local.municipio === municipioEscolhido;
+
+    return categoriaOk && municipioOk;
   });
 
-  mapaApoio.fitBounds(pontos, { padding: [40, 40], maxZoom: 15 });
+  filtrados.forEach(local => {
+
+    const popup = `
+      <strong>${textoSeguro(local.nome)}</strong><br>
+      ${textoSeguro(local.categoria.nome)}<br>
+      ${textoSeguro(local.municipio)}<br>
+      ${textoSeguro(local.endereco)}
+
+      ${local.telefone
+        ? `<br>Telefone: ${textoSeguro(local.telefone)}`
+        : ''
+      }
+
+      <br>
+      <a href="${local.osm}" target="_blank" rel="noopener">
+        Ver registro no OpenStreetMap
+      </a>
+
+      <br>
+      <a href="https://www.google.com/maps/dir/?api=1&destination=${local.lat},${local.lng}"
+         target="_blank" rel="noopener">
+        Como chegar
+      </a>
+    `;
+
+    L.marker(
+      [local.lat, local.lng],
+      { icon: criarIcone(local.categoria.cor) }
+    )
+      .addTo(camadaLocais)
+      .bindPopup(popup);
+
+    const item = document.createElement('li');
+
+    item.innerHTML = `
+      <h4>${textoSeguro(local.nome)}</h4>
+
+      <span class="tag-categoria">
+        ${textoSeguro(local.categoria.nome)}
+      </span>
+
+      <p>
+        <strong>Município:</strong>
+        ${textoSeguro(local.municipio)}
+      </p>
+
+      <p>
+        <strong>Endereço:</strong>
+        ${textoSeguro(local.endereco)}
+      </p>
+
+      ${local.telefone
+        ? `<p><strong>Telefone:</strong> ${textoSeguro(local.telefone)}</p>`
+        : ''
+      }
+
+      <p>
+        <a href="${local.osm}" target="_blank" rel="noopener">
+          Ver registro
+        </a>
+
+        ·
+
+        <a href="https://www.google.com/maps/dir/?api=1&destination=${local.lat},${local.lng}"
+           target="_blank" rel="noopener">
+          Como chegar
+        </a>
+      </p>
+    `;
+
+    item.addEventListener('click', () => {
+      mapa.setView([local.lat, local.lng], 15);
+    });
+
+    listaLocais.appendChild(item);
+  });
+
+  quantidadeLocais.textContent =
+    `${filtrados.length} ${filtrados.length === 1 ? 'local' : 'locais'}`;
+
+  if (filtrados.length === 0) {
+    listaLocais.innerHTML = `
+      <li>
+        Nenhum registro encontrado para os filtros selecionados.
+        Tente outra categoria ou município.
+      </li>
+    `;
+  }
 }
 
-btnApoio.addEventListener('click', () => {
+// Preenche o filtro de municípios
+function preencherMunicipios() {
+
+  const selecionado = filtroMunicipio.value;
+
+  const municipios = [
+    ...new Set(
+      todosLocais.map(local => local.municipio)
+    )
+  ]
+    .filter(nome => nome !== 'Município não informado')
+    .sort((a, b) => a.localeCompare(b, 'pt-BR'));
+
+  filtroMunicipio.innerHTML = `
+    <option value="todos">Todos os municípios</option>
+  `;
+
+  municipios.forEach(municipio => {
+
+    const opcao = document.createElement('option');
+
+    opcao.value = municipio;
+    opcao.textContent = municipio;
+
+    filtroMunicipio.appendChild(opcao);
+  });
+
+  if (municipios.includes(selecionado)) {
+    filtroMunicipio.value = selecionado;
+  }
+}
+
+// Consulta a API do OpenStreetMap
+async function carregarLocais() {
+
+  btnAtualizar.disabled = true;
+
+  statusApoio.textContent =
+    'Consultando os registros do OpenStreetMap para Pernambuco. Isso pode levar alguns segundos...';
+
+  try {
+
+    const resposta = await fetch(
+      'https://overpass-api.de/api/interpreter',
+      {
+        method: 'POST',
+
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+
+        body: 'data=' + encodeURIComponent(consultaOverpass)
+      }
+    );
+
+    if (!resposta.ok) {
+      throw new Error(`Erro na consulta: ${resposta.status}`);
+    }
+
+    const dados = await resposta.json();
+
+    const unicos = new Map();
+
+    (dados.elements || []).forEach(elemento => {
+
+      const local = montarLocal(elemento);
+
+      if (local) {
+        unicos.set(local.id, local);
+      }
+
+    });
+
+    todosLocais = [...unicos.values()].sort((a, b) =>
+      a.municipio.localeCompare(b.municipio, 'pt-BR') ||
+      a.nome.localeCompare(b.nome, 'pt-BR')
+    );
+
+    preencherMunicipios();
+    desenharLocais();
+
+    if (todosLocais.length > 0) {
+
+      const limites = L.latLngBounds(
+        todosLocais.map(local => [local.lat, local.lng])
+      );
+
+      mapa.fitBounds(
+        limites,
+        {
+          padding: [25, 25],
+          maxZoom: 10
+        }
+      );
+
+      statusApoio.textContent =
+        `${todosLocais.length} registros encontrados. A cobertura depende dos dados cadastrados no OpenStreetMap.`;
+
+    } else {
+
+      statusApoio.textContent =
+        'A consulta terminou, mas não encontrou registros com esses critérios. Isso não significa que não existam serviços na região.';
+
+    }
+
+  } catch (erro) {
+
+    console.error('Erro ao consultar OpenStreetMap:', erro);
+
+    statusApoio.textContent =
+      'Não foi possível consultar o OpenStreetMap agora. Verifique sua conexão e tente novamente.';
+
+    listaLocais.innerHTML = `
+      <li>
+        Não foi possível carregar os locais.
+        Tente novamente mais tarde.
+      </li>
+    `;
+
+    quantidadeLocais.textContent = 'Consulta indisponível';
+
+  } finally {
+
+    btnAtualizar.disabled = false;
+
+  }
+}
+
+// Filtros
+filtroCategoria.addEventListener('change', desenharLocais);
+filtroMunicipio.addEventListener('change', desenharLocais);
+
+// Botão para atualizar
+btnAtualizar.addEventListener('click', carregarLocais);
+
+// Localização da pessoa usuária
+btnLocalizacao.addEventListener('click', () => {
+
   if (!navigator.geolocation) {
-    msgApoio.textContent = 'Seu navegador não suporta localização. Mostrando todas as casas de apoio.';
-    mostrarLocais(null);
+
+    statusApoio.textContent =
+      'Seu navegador não oferece recurso de localização.';
+
     return;
   }
 
-  msgApoio.textContent = 'Buscando sua localização...';
-  btnApoio.disabled = true;
+  statusApoio.textContent =
+    'Solicitando sua localização...';
 
   navigator.geolocation.getCurrentPosition(
-    pos => {
-      msgApoio.textContent = 'Casas de apoio mais próximas de você:';
-      btnApoio.disabled = false;
-      mostrarLocais({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+
+    posicao => {
+
+      mapa.setView(
+        [
+          posicao.coords.latitude,
+          posicao.coords.longitude
+        ],
+        12
+      );
+
+      L.circleMarker(
+        [
+          posicao.coords.latitude,
+          posicao.coords.longitude
+        ],
+        {
+          radius: 8,
+          color: '#fff',
+          weight: 2,
+          fillColor: '#1a73e8',
+          fillOpacity: 1
+        }
+      )
+        .addTo(mapa)
+        .bindPopup('Sua localização aproximada')
+        .openPopup();
+
+      statusApoio.textContent =
+        'Mapa centralizado na sua localização. Os locais exibidos continuam sendo os registros encontrados no OpenStreetMap.';
+
     },
+
     () => {
-      msgApoio.textContent =
-        'Não foi possível pegar sua localização (permissão negada ou indisponível). Mostrando todas as casas de apoio.';
-      btnApoio.disabled = false;
-      mostrarLocais(null);
+
+      statusApoio.textContent =
+        'Não foi possível obter sua localização. Você ainda pode navegar pelo mapa de Pernambuco.';
+
     },
-    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 60000
+    }
+
   );
+
 });
+
+// Inicia a consulta ao abrir a página
+carregarLocais();
