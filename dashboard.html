@@ -56,13 +56,34 @@
       <div class="grafico-box"><canvas id="grafico3"></canvas></div>
     </section>
 
+    <!-- NOVO: Mapa por região -->
+    <section class="mapa-regiao">
+      <h2>Mortes por região</h2>
+      <div id="mapa"></div>
+    </section>
+
+    <!-- NOVO: Casas de apoio -->
+    <section id="apoio">
+      <h2>Casas de apoio perto de você</h2>
+      <button id="btnApoio" type="button">📍 Ver casas de apoio perto de mim</button>
+      <p id="msgApoio" role="status"></p>
+      <div id="mapaApoio" hidden></div>
+      <ol id="listaApoio"></ol>
+      <p class="emergencia">
+        Em perigo agora? Ligue <strong>190</strong>.
+        Orientação: <strong>Ligue 180</strong> ou Liga Mulher <strong>0800 281 0107</strong>.
+      </p>
+    </section>
+
     <p class="fonte-dados" id="fonteDados"></p>
 
   </main>
 
-  
+  <!-- A ordem dos scripts importa -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>   <!-- NOVO -->
   <script src="script.js"></script>
+  <script src="apoio.js"></script>                                           <!-- NOVO -->
 
 </body>
 </html>
