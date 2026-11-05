@@ -1,89 +1,128 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Dashboard - Mandacaru</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nova+Mono&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
+  <link href="https://fonts.googleapis.com/css2?family=Nova+Mono&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="dashboard.css">
 </head>
+
 <body>
 
   <header class="cabecalho">
+
     <div class="container-cabecalho">
+
       <div class="logo-area">
         <img src="img/logo-mandacaru-branco.png" alt="Logo Mandacaru" class="logo-imagem">
         <h1 class="nome-projeto">Mandacaru</h1>
       </div>
+
       <nav class="menu-navegacao">
         <ul class="lista-menu">
-          <li><a href="index.html" class="link-menu">Início</a></li>
-          <li><a href="tipos-violencia.html" class="link-menu">Tipos de Violência</a></li>
-          <li><a href="dashboard.html" class="link-menu">Dashboard</a></li>
+
+          <li>
+            <a href="index.html" class="link-menu">Início</a>
+          </li>
+
+          <li>
+            <a href="tipos-violencia.html" class="link-menu">Tipos de Violência</a>
+          </li>
+
+          <li>
+            <a href="dashboard.html" class="link-menu">Dashboard</a>
+          </li>
+
+          <li>
+            <a href="apoio.html" class="link-menu">Locais de Apoio</a>
+          </li>
+
         </ul>
       </nav>
+
     </div>
+
   </header>
 
   <main class="container">
 
-    <!-- Filtros (todos por ano) -->
+    <!-- Filtros dos gráficos -->
+
     <section class="filtros">
+
       <div class="filtro">
+
         <label for="anoInicio">Ano inicial</label>
         <select id="anoInicio"></select>
+
       </div>
 
       <div class="filtro">
+
         <label for="anoFim">Ano final</label>
         <select id="anoFim"></select>
+
       </div>
 
-      <button id="btnLimpar" type="button">Limpar filtros</button>
+      <button id="btnLimpar" type="button">
+        Limpar filtros
+      </button>
+
     </section>
 
-    <p id="msgVazio" class="msg-vazio" hidden>Nenhum dado para os filtros escolhidos.</p>
+    <p id="msgVazio" class="msg-vazio" hidden>
+      Nenhum dado para os filtros escolhidos.
+    </p>
 
     <!-- Gráficos -->
+
     <section class="graficos">
-      <div class="grafico-box"><canvas id="grafico1"></canvas></div>
-      <div class="grafico-box"><canvas id="grafico2"></canvas></div>
-      <div class="grafico-box"><canvas id="grafico3"></canvas></div>
+
+      <div class="grafico-box">
+        <canvas id="grafico1"></canvas>
+      </div>
+
+      <div class="grafico-box">
+        <canvas id="grafico2"></canvas>
+      </div>
+
+      <div class="grafico-box">
+        <canvas id="grafico3"></canvas>
+      </div>
+
     </section>
 
-    <!-- NOVO: Mapa por região -->
+    <!-- Mapa por região -->
+
     <section class="mapa-regiao">
-      <h2>Mortes por região</h2>
-      <div id="mapa"></div>
-    </section>
 
-    <!-- NOVO: Casas de apoio -->
-    <section id="apoio">
-      <h2>Casas de apoio perto de você</h2>
-      <button id="btnApoio" type="button">📍 Ver casas de apoio perto de mim</button>
-      <p id="msgApoio" role="status"></p>
-      <div id="mapaApoio" hidden></div>
-      <ol id="listaApoio"></ol>
-      <p class="emergencia">
-        Em perigo agora? Ligue <strong>190</strong>.
-        Orientação: <strong>Ligue 180</strong> ou Liga Mulher <strong>0800 281 0107</strong>.
-      </p>
+      <h2>Mortes por região</h2>
+
+      <div id="mapa"></div>
+
     </section>
 
     <p class="fonte-dados" id="fonteDados"></p>
 
   </main>
 
-  <!-- A ordem dos scripts importa -->
+  <!-- Bibliotecas e scripts -->
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>   <!-- NOVO -->
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
   <script src="script.js"></script>
-  <script src="apoio.js"></script>                                           <!-- NOVO -->
 
 </body>
+
 </html>
