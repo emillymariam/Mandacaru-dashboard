@@ -385,3 +385,28 @@ body {
   text-align: center !important;
   color: #777;
 }
+
+/* ---------- Mapa e locais de apoio ---------- */
+#mapa {
+  height: 400px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+#mapaApoio {
+  height: 420px;
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+#btnApoio {
+  padding: 12px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+#listaApoio li { margin: 10px 0; }
+.emergencia { margin-top: 16px; font-weight: bold; }
+.aberto  { color: green; }
+.fechado { color: crimson; }
